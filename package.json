@@ -1,10 +1,14 @@
 {
-  "name": "qapdashboard",
+  "name": "QAPdashboard",
   "private": true,
   "scripts": {
     "start": "meteor run"
   },
   "dependencies": {
-    "meteor-node-stubs": "~0.2.0"
+    "babel-runtime": "^6.20.0",
+    "datatables.net-bs": "^1.10.15",
+    "jquery": "^1.11.2",
+    "meteor-node-stubs": "~0.2.4",
+    "moment": "^2.18.1"
   }
 }

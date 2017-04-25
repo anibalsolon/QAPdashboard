@@ -1,0 +1,21 @@
+<template name="anatomical">
+<div class=""></div>
+<div class="container-fluid">
+  <h1>Anatomical Files</h1>
+  {{> tabular table=TabularTables.AnatomicalTable class="table table-striped table-bordered table-condensed"}}
+
+  <div class="row">
+  <div class="col-md-4">
+    <select id="metric-select-anatomical" class="form-control">
+      <option disabled="disabled" selected="selected" >Please Select</option>
+      <option value="CNR">CNR</option>
+      <option value="EFC">EFC</option>
+      <option value="FBER">FBER</option>
+      <option value="SNR">SNR</option>
+      <option value="FWHM">FWHM</option>
+    </select>
+    Selected Metric: {{currentMetric}}
+    </div>
+  </div>
+</div>
+</template>
