@@ -35,8 +35,6 @@ bar.append("rect")
     .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
     .attr("height", function(d) { return height - y(d.length); });
 
-console.log(d3)
-
 bar.append("text")
     .attr("dy", ".75em")
     .attr("y", 6)

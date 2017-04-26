@@ -10,6 +10,7 @@ import './histogram.css';
 Template.anatomical.helpers({
   anatomical(){
     return Anatomical.find({});
+
   },
   currentMetric: function(){
     const instance = Template.instance();
@@ -22,7 +23,7 @@ Template.anatomical.events({
     var metric = $(event.currentTarget).val();
     const instance = Template.instance();
     instance.state.set('current_anatomical_metric', metric);
-    histogram();
+    histogram(metric);
   },
 });
 
@@ -30,11 +31,22 @@ Template.anatomical.onCreated(function anatomicalOnCreated() {
   this.state = new ReactiveDict();
 });
 
-histogram = function() {
-  var data = [1, 2, 3, 4, 5, 6,6,6,6,6,6,6,6,6, 7,7,7,7,7,7,7, 8,8,8,8,8,8,8, 9,9,9,9, 10, 11, 12, 13, 14, 15];
-  var min_val = 1;
-  var max_val = 15;
-  renderHistogram(data, min_val, max_val, "#anatomicalHistogram");
+histogram = function(metric) {
+  //var data = [1, 2, 3, 4, 5, 6,6,6,6,6,6,6,6,6, 7,7,7,7,7,7,7, 8,8,8,8,8,8,8, 9,9,9,9, 10, 11, 12, 13, 14, 15];
+  var metric = metric.toString();
+  var data = Anatomical.find({},{fields:{'CNR': 1, '_id': 0}}).fetch();
+
+  d = _.chain(data)
+    .pluck('CNR')
+    .flatten()
+    .uniq()
+    .value();
+
+  console.log(d);
+  var min_val = Math.min.apply(Math, d);
+  console.log(min_val);
+  var max_val = Math.max.apply(Math, d);
+  renderHistogram(d, min_val, max_val, "#anatomicalHistogram");
 }
 
 
