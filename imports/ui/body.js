@@ -20,7 +20,7 @@ Template.anatomical.helpers({
 
 Template.anatomical.events({
   "change #metric-select-anatomical": function(event, template){
-    var metric = $(event.currentTarget).val();
+    var metric = ""+ $(event.currentTarget).val();
     const instance = Template.instance();
     instance.state.set('current_anatomical_metric', metric);
     histogram(metric);
@@ -33,11 +33,13 @@ Template.anatomical.onCreated(function anatomicalOnCreated() {
 
 histogram = function(metric) {
   //var data = [1, 2, 3, 4, 5, 6,6,6,6,6,6,6,6,6, 7,7,7,7,7,7,7, 8,8,8,8,8,8,8, 9,9,9,9, 10, 11, 12, 13, 14, 15];
-  var metric = metric.toString();
-  var data = Anatomical.find({},{fields:{'CNR': 1, '_id': 0}}).fetch();
-
+  var projection = {};
+  projection[metric] = 1;
+  projection['_id'] = 0;
+  var data = Anatomical.find({},{fields:projection}).fetch();
+  console.log(data);
   d = _.chain(data)
-    .pluck('CNR')
+    .pluck(metric)
     .flatten()
     .uniq()
     .value();
