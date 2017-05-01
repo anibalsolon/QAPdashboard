@@ -10,7 +10,13 @@ new Tabular.Table({
   name: "AnatomicalTable",
   collection: Anatomical,
   columns: [
-    {data: "Participant", title: "Subject"},
+    {
+      data: "Participant", 
+      title: "Subject",
+      render: function (val, type, doc) {
+        return '<a href="/showImage/mock">'+val+'</a>';
+      }
+    },
     {data: "Session", title: "Session"},
     {data: "CNR", title: "CNR"},
     {data: "EFC", title: "EFC"},

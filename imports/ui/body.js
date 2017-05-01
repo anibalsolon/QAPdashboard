@@ -1,11 +1,11 @@
 import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { Anatomical } from '../api/anatomical.js';
+import './showImage.html'
 import './anatomical.html';
 import './body.html';
 import './histogram.js';
 import './histogram.css';
-//import "./d3_plots.js"
 
 Template.anatomical.helpers({
   anatomical(){
@@ -25,6 +25,12 @@ Template.anatomical.events({
     instance.state.set('current_anatomical_metric', metric);
     histogram(metric);
   },
+  'click tbody > tr': function (event) {
+    var dataTable = $(event.target).closest('table').DataTable();
+    var rowData = dataTable.row(event.currentTarget).data();
+    if (!rowData) return; // Won't be data if a placeholder row is clicked
+    // Your click handler logic here
+  }
 });
 
 Template.anatomical.onCreated(function anatomicalOnCreated() {
@@ -44,22 +50,9 @@ histogram = function(metric) {
     .uniq()
     .value();
 
-  console.log(d);
+  //console.log(d);
   var min_val = Math.min.apply(Math, d);
-  console.log(min_val);
+  //console.log(min_val);
   var max_val = Math.max.apply(Math, d);
   renderHistogram(d, min_val, max_val, "#anatomicalHistogram");
 }
-
-
-// Template.anatomical.rendered = function() {
-//   if(!this.rendered) {
-//     this.rendered = true;
-//   }
-
-//   this.autorun(function() {
-//     const instance = Template.instance();
-//     instance.state.get("current_anatomical_metric");
-//     render_histogram("current_anatomical_metric","d3_anatomical")
-//   });
-// }
