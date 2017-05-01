@@ -24,3 +24,6 @@ twbs:bootstrap
 momentjs:moment
 kadira:flow-router
 kadira:blaze-layout
+flowkey:user-location
+flowkey:bowser
+jquery

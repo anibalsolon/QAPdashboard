@@ -8,7 +8,6 @@ FlowRouter.route('/', {
 FlowRouter.route('/showImage/:subjectid', {
   name: 'subject.show',
   action() {
-  	console.log('oi!');
     BlazeLayout.render('App_body', {main: 'showImagePage'});
   }
 });
