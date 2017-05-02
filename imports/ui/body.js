@@ -8,7 +8,7 @@ import './histogram.css';
 
 // import './papaya/papaya.css';
 // import './papaya/papaya.js';
-import './showImage.html';
+import './showAnatomical.html';
 
 
 
@@ -62,13 +62,14 @@ histogram = function(metric) {
   renderHistogram(d, min_val, max_val, "#anatomicalHistogram");
 }
 
-Template.showImagePage.rendered = function() {
+Template.showAnatomicalPage.rendered = function() {
   if(!this._rendered) {
     this._rendered = true;
   }
 
   this.autorun(function(){
-    var params = [];
+    var params = {};
+    //add all images in the public directory
     params["images"] = ["/sub-0050003_ses-1_T1w_anatomical-reorient.nii.gz"];
     console.log(params);
     papaya.Container.addViewer("imageDisplay", params, function(err, params){

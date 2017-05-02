@@ -5,9 +5,9 @@ FlowRouter.route('/', {
   }
 });
 
-FlowRouter.route('/showImage/:subjectid', {
+FlowRouter.route('/showAnatomical/:subjectid', {
   name: 'subject.show',
   action() {
-    BlazeLayout.render('App_body', {main: 'showImagePage'});
+    BlazeLayout.render('App_body', {main: 'showAnatomicalPage'});
   }
 });
