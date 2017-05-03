@@ -1,5 +1,5 @@
 import '../imports/ui/body.js';
-import '../imports/ui/showAnatomical.js';
+import '../imports/ui/showAnatomicalPage.js';
 import '../imports/ui/routers.js'
 
 //add bootstrap to datatable

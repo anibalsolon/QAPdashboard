@@ -14,7 +14,7 @@ new Tabular.Table({
       data: "Participant", 
       title: "Subject",
       render: function (val, type, doc) {
-        return '<a href="/showImage/mock">'+val+'</a>';
+        return '<a href="/showAnatomical/mock">'+val+'</a>';
       }
     },
     {data: "Session", title: "Session"},
