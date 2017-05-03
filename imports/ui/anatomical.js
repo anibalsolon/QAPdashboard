@@ -2,8 +2,8 @@ import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { Anatomical } from '../api/anatomical.js';
 import './anatomical.html';
-import './histogram.js';
-import './histogram.css';
+import './charts/histogram.js';
+import './charts/histogram.css';
 
 Template.anatomical.helpers({
   anatomical(){
