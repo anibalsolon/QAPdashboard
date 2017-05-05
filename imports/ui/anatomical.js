@@ -38,7 +38,6 @@ histogram = function(metric) {
   d = _.chain(data)
     .pluck(metric)
     .flatten()
-    .uniq()
     .value();
 
   var min_val = Math.min.apply(Math, d);
