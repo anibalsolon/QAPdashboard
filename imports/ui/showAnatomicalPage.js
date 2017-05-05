@@ -3,7 +3,7 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 import { Anatomical } from '../api/anatomical.js';
 import './showAnatomicalPage.html';
 import './charts/boxplot.css';    
-import  './charts/boxplot.js';
+import './charts/boxplot.js';
 
 Template.showAnatomicalPage.events({
   "click input": function(event, template){
@@ -48,15 +48,15 @@ showAnatomicalImage = function() {
     params["sub-0050003_ses-1_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
   }
 
-  papaya.Container.addViewer("imageDisplay", params, function(err, params){
-                                        console.log('papaya callback', err, params)
-                                        });
-  papaya.Container.allowPropagation = true;
+  // papaya.Container.addViewer("imageDisplay", params, function(err, params){
+  //                                       console.log('papaya callback', err, params)
+  //                                       });
+  // papaya.Container.allowPropagation = true;
 }
 
 boxplot = function() {
   var projection = {'_id':0,'CNR':1, 'EFC':1, 'FBER':1, 'FWHM':1, 'SNR':1};  
   var allSubjects = Anatomical.find({},{fields:projection}).fetch();
 
-  renderBoxplot("#individualAnatBoxplot");
+  renderBoxplot(allSubjects, "#individualAnatBoxplot");
 }

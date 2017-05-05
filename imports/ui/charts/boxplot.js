@@ -20,7 +20,7 @@ d3.box = function() {
       whiskers = boxWhiskers,
       quartiles = boxQuartiles,
     showLabels = true, // whether or not to show text labels
-    numBars = 4,
+    numBars = 5,
     curBar = 1,
       tickFormat = null;
 
@@ -80,28 +80,11 @@ d3.box = function() {
       center.enter().insert("line", "rect")
           .attr("class", "center")
           .attr("x1", width / 2)
-          .attr("y1", function(d) { return x0(d[0]); })
+          // .attr("y1", function(d) { console.log('d: '+ d); console.log('d0: '+ d[0]); console.log('x0: '+ x0); return x0(d[0]); })
+          .attr("y1", function(d) {console.log('dddd: '+ d[0]); console.log('x1: '+ x1); console.log('func2: '+ x1(d[0])); return x1(d[0]); })
           .attr("x2", width / 2)
-          .attr("y2", function(d) { return x0(d[1]); })
-          .style("opacity", 1e-6)
-        .transition()
-          .duration(duration)
-          .style("opacity", 1)
-          .attr("y1", function(d) { return x1(d[0]); })
-          .attr("y2", function(d) { return x1(d[1]); });
-
-      center.transition()
-          .duration(duration)
-          .style("opacity", 1)
-          .attr("y1", function(d) { return x1(d[0]); })
-          .attr("y2", function(d) { return x1(d[1]); });
-
-      center.exit().transition()
-          .duration(duration)
-          .style("opacity", 1e-6)
-          .attr("y1", function(d) { return x1(d[0]); })
           .attr("y2", function(d) { return x1(d[1]); })
-          .remove();
+          .style("opacity", 1);
 
       // Update innerquartile box.
       var box = g.selectAll("rect.box")
@@ -110,38 +93,21 @@ d3.box = function() {
       box.enter().append("rect")
           .attr("class", "box")
           .attr("x", 0)
-          .attr("y", function(d) { return x0(d[2]); })
+          .attr("y", function(d) { console.log('d: '+ d);  return x1(d[2]); })
           .attr("width", width)
-          .attr("height", function(d) { return x0(d[0]) - x0(d[2]); })
-        .transition()
-          .duration(duration)
-          .attr("y", function(d) { return x1(d[2]); })
-          .attr("height", function(d) { return x1(d[0]) - x1(d[2]); });
-
-      box.transition()
-          .duration(duration)
-          .attr("y", function(d) { return x1(d[2]); })
-          .attr("height", function(d) { return x1(d[0]) - x1(d[2]); });
+          .attr("height", function(d) { console.log('d: '+ d);  return x1(d[0]) - x1(d[2]); });
 
       // Update median line.
       var medianLine = g.selectAll("line.median")
           .data([quartileData[1]]);
 
+      console.log(x0,x1);
       medianLine.enter().append("line")
           .attr("class", "median")
           .attr("x1", 0)
-          .attr("y1", x0)
+          .attr("y1", x1)
           .attr("x2", width)
-          .attr("y2", x0)
-        .transition()
-          .duration(duration)
-          .attr("y1", x1)
-          .attr("y2", x1);
-
-      medianLine.transition()
-          .duration(duration)
-          .attr("y1", x1)
-          .attr("y2", x1);
+          .attr("y2", x1); 
 
       // Update whiskers.
       var whisker = g.selectAll("line.whisker")
@@ -150,29 +116,13 @@ d3.box = function() {
       whisker.enter().insert("line", "circle, text")
           .attr("class", "whisker")
           .attr("x1", 0)
-          .attr("y1", x0)
+          .attr("y1", x1)
           .attr("x2", 0 + width)
-          .attr("y2", x0)
-          .style("opacity", 1e-6)
-        .transition()
-          .duration(duration)
-          .attr("y1", x1)
           .attr("y2", x1)
           .style("opacity", 1);
 
-      whisker.transition()
-          .duration(duration)
-          .attr("y1", x1)
-          .attr("y2", x1)
-          .style("opacity", 1);
 
-      whisker.exit().transition()
-          .duration(duration)
-          .attr("y1", x1)
-          .attr("y2", x1)
-          .style("opacity", 1e-6)
-          .remove();
-
+      console.log('im here1');
       // Update outliers.
       var outlier = g.selectAll("circle.outlier")
           .data(outlierIndices, Number);
@@ -181,23 +131,9 @@ d3.box = function() {
           .attr("class", "outlier")
           .attr("r", 5)
           .attr("cx", width / 2)
-          .attr("cy", function(i) { return x0(d[i]); })
-          .style("opacity", 1e-6)
-        .transition()
-          .duration(duration)
           .attr("cy", function(i) { return x1(d[i]); })
           .style("opacity", 1);
 
-      outlier.transition()
-          .duration(duration)
-          .attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1);
-
-      outlier.exit().transition()
-          .duration(duration)
-          .attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1e-6)
-          .remove();
 
       // Compute the tick format.
       var format = tickFormat || x1.tickFormat(8);
@@ -211,18 +147,10 @@ d3.box = function() {
           .attr("dy", ".3em")
           .attr("dx", function(d, i) { return i & 1 ? 6 : -6 })
           .attr("x", function(d, i) { return i & 1 ?  + width : 0 })
-          .attr("y", x0)
+          .attr("y", x1)
           .attr("text-anchor", function(d, i) { return i & 1 ? "start" : "end"; })
-          .text(format)
-        .transition()
-          .duration(duration)
-          .attr("y", x1);
+          .text(format);
   }
-     
-      boxTick.transition()
-          .duration(duration)
-          .text(format)
-          .attr("y", x1);
 
       // Update whisker ticks. These are handled separately from the box
       // ticks because they may or may not exist, and we want don't want
@@ -235,25 +163,11 @@ d3.box = function() {
           .attr("dy", ".3em")
           .attr("dx", 6)
           .attr("x", width)
-          .attr("y", x0)
-          .text(format)
-          .style("opacity", 1e-6)
-        .transition()
-          .duration(duration)
           .attr("y", x1)
+          .text(format)
           .style("opacity", 1);
   }
-      whiskerTick.transition()
-          .duration(duration)
-          .text(format)
-          .attr("y", x1)
-          .style("opacity", 1);
 
-      whiskerTick.exit().transition()
-          .duration(duration)
-          .attr("y", x1)
-          .style("opacity", 1e-6)
-          .remove();
     });
     d3.timerFlush();
   }
@@ -330,7 +244,8 @@ function boxQuartiles(d) {
 })();
 //end box.js
 
-renderBoxplot = function(domid) {
+renderBoxplot = function(subjectData, domid) {
+  console.log(subjectData);
 var labels = true; // show the text labels beside individual boxplots?
 
 var margin = {top: 30, right: 50, bottom: 70, left: 50};
@@ -349,43 +264,71 @@ d3.csv("/data.csv", function(error, csv) {
   // data[i][1] = array of values of ith column
 
   var data = [];
-  data[0] = [];
-  data[1] = [];
-  data[2] = [];
-  data[3] = [];
-  // add more rows if your csv file has more columns
-
-  // add here the header of the csv file
-  data[0][0] = "Q1";
-  data[1][0] = "Q2";
-  data[2][0] = "Q3";
-  data[3][0] = "Q4";
-  // add more rows if your csv file has more columns
-
-  data[0][1] = [];
-  data[1][1] = [];
-  data[2][1] = [];
-  data[3][1] = [];
+  var metrics = ['CNR', 'EFC', 'FBER', 'FWHM', 'SNR'];
+  var min = Infinity;
+  var max = -Infinity;
   
-  csv.forEach(function(x) {
-    var v1 = Math.floor(x.Q1),
-      v2 = Math.floor(x.Q2),
-      v3 = Math.floor(x.Q3),
-      v4 = Math.floor(x.Q4);
-      // add more variables if your csv file has more columns
-      
-    var rowMax = Math.max(v1, Math.max(v2, Math.max(v3,v4)));
-    var rowMin = Math.min(v1, Math.min(v2, Math.min(v3,v4)));
+  for (var i = 0; i < metrics.length; i++) {
+    data[i] = [];
+  };
 
-    data[0][1].push(v1);
-    data[1][1].push(v2);
-    data[2][1].push(v3);
-    data[3][1].push(v4);
-     // add more rows if your csv file has more columns
+  for (var i = 0; i < metrics.length; i++) {
+    clean = _.chain(subjectData)
+    .pluck(metrics[i])
+    .flatten()
+    .value();
+    data[i] = [metrics[i], clean];
+
+    var localMin = Math.min.apply(null, clean);
+    min = Math.min(localMin, min);
+    var localMax = Math.max.apply(null, clean);
+    max = Math.max(localMax, max);
+  };
+
+  console.log('min: ', min);
+    console.log('max: ', max);
+
+  
+  console.log(data);
+
+  // var data = [];
+  // data[0] = [];
+  // data[1] = [];
+  // data[2] = [];
+  // data[3] = [];
+  // // add more rows if your csv file has more columns
+
+  // // add here the header of the csv file
+  // data[0][0] = "Q1";
+  // data[1][0] = "Q2";
+  // data[2][0] = "Q3";
+  // data[3][0] = "Q4";
+  // // add more rows if your csv file has more columns
+
+  // data[0][1] = [];
+  // data[1][1] = [];
+  // data[2][1] = [];
+  // data[3][1] = [];
+  // csv.forEach(function(x) {
+  //   var v1 = Math.floor(x.Q1),
+  //     v2 = Math.floor(x.Q2),
+  //     v3 = Math.floor(x.Q3),
+  //     v4 = Math.floor(x.Q4);
+  //     // add more variables if your csv file has more columns
+      
+  //   var rowMax = Math.max(v1, Math.max(v2, Math.max(v3,v4)));
+  //   var rowMin = Math.min(v1, Math.min(v2, Math.min(v3,v4)));
+
+  //   data[0][1].push(v1);
+  //   data[1][1].push(v2);
+  //   data[2][1].push(v3);
+  //   data[3][1].push(v4);
+  //    // add more rows if your csv file has more columns
      
-    if (rowMax > max) max = rowMax;
-    if (rowMin < min) min = rowMin; 
-  });
+  //   if (rowMax > max) max = rowMax;
+  //   if (rowMin < min) min = rowMin; 
+  // });
+  //     console.log(data);
   
   var chart = d3.box()
     .whiskers(iqr(1.5))
@@ -414,14 +357,17 @@ d3.csv("/data.csv", function(error, csv) {
   
   var yAxis = d3.axisLeft(y);
 
-  // draw the boxplots  
+  console.log('antes box');
+
+  //draw the boxplots  
   svg.selectAll(".box")    
       .data(data)
     .enter().append("g")
-    .attr("transform", function(d) { var aa = x(d[0])+ x.bandwidth()*0.3;  return "translate(" +  aa  + "," + margin.top + ")"; } )
+    .attr("transform", function(d) { var aa = x(d[0])+ x.bandwidth()*0.3; console.log('aa: '+ aa);  return "translate(" +  aa  + "," + margin.top + ")"; } )
       .call(chart.width(x.bandwidth()*0.4)); 
   
-        
+  console.log('depois box');
+
   // add a title
   svg.append("text")
         .attr("x", (width / 2))             
@@ -429,19 +375,19 @@ d3.csv("/data.csv", function(error, csv) {
         .attr("text-anchor", "middle")  
         .style("font-size", "18px") 
         //.style("text-decoration", "underline")  
-        .text("Revenue 2012");
+        .text("RMetrics");
  
    // draw y axis
   svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis)
-    .append("text") // and text1
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .style("font-size", "16px") 
-      .text("Revenue in €");    
+        .call(yAxis);
+    // .append("text") // and text1
+    //   .attr("transform", "rotate(-90)")
+    //   .attr("y", 6)
+    //   .attr("dy", ".71em")
+    //   .style("text-anchor", "end")
+    //   .style("font-size", "16px") 
+    //   .text("Revenue in €");    
   
   // draw x axis  
   svg.append("g")
