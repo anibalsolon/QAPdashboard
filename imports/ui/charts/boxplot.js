@@ -14,9 +14,9 @@ d3.functor = d3_functor;
 d3.box = function() {
   var width = 1,
       height = 1,
-      duration = 0,
       domain = null,
       value = Number,
+      marker = [0],
       whiskers = boxWhiskers,
       quartiles = boxQuartiles,
     showLabels = true, // whether or not to show text labels
@@ -30,11 +30,7 @@ d3.box = function() {
       //d = d.map(value).sort(d3.ascending);
     //var boxIndex = data[0];
     //var boxIndex = 1;
-    var d = data[1].sort(d3.ascending);
-    
-   // console.log(boxIndex); 
-    //console.log(d); 
-    
+    var d = data[1].sort(d3.ascending); 
       var g = d3.select(this),
           n = d.length,
           min = d[0],
@@ -49,9 +45,11 @@ d3.box = function() {
 
       // Compute outliers. If no whiskers are specified, all data are "outliers".
       // We compute the outliers as indices, so that we can join across transitions!
-      var outlierIndices = whiskerIndices
-          ? d3.range(0, whiskerIndices[0]).concat(d3.range(whiskerIndices[1] + 1, n))
-          : d3.range(n);
+      //changed oultilers to subject data point
+      var outlierIndices = marker[i];
+      // var outlierIndices = whiskerIndices
+      //     ? d3.range(0, whiskerIndices[0]).concat(d3.range(whiskerIndices[1] + 1, n))
+      //     : d3.range(n);
 
       // Compute the new x-scale.
       var x1 = d3.scaleLinear()
@@ -80,8 +78,7 @@ d3.box = function() {
       center.enter().insert("line", "rect")
           .attr("class", "center")
           .attr("x1", width / 2)
-          // .attr("y1", function(d) { console.log('d: '+ d); console.log('d0: '+ d[0]); console.log('x0: '+ x0); return x0(d[0]); })
-          .attr("y1", function(d) {console.log('dddd: '+ d[0]); console.log('x1: '+ x1); console.log('func2: '+ x1(d[0])); return x1(d[0]); })
+          .attr("y1", function(d) { return x1(d[0]); })
           .attr("x2", width / 2)
           .attr("y2", function(d) { return x1(d[1]); })
           .style("opacity", 1);
@@ -93,15 +90,14 @@ d3.box = function() {
       box.enter().append("rect")
           .attr("class", "box")
           .attr("x", 0)
-          .attr("y", function(d) { console.log('d: '+ d);  return x1(d[2]); })
+          .attr("y", function(d) {  return x1(d[2]); })
           .attr("width", width)
-          .attr("height", function(d) { console.log('d: '+ d);  return x1(d[0]) - x1(d[2]); });
+          .attr("height", function(d) {  return x1(d[0]) - x1(d[2]); });
 
       // Update median line.
       var medianLine = g.selectAll("line.median")
           .data([quartileData[1]]);
 
-      console.log(x0,x1);
       medianLine.enter().append("line")
           .attr("class", "median")
           .attr("x1", 0)
@@ -121,8 +117,6 @@ d3.box = function() {
           .attr("y2", x1)
           .style("opacity", 1);
 
-
-      console.log('im here1');
       // Update outliers.
       var outlier = g.selectAll("circle.outlier")
           .data(outlierIndices, Number);
@@ -131,7 +125,7 @@ d3.box = function() {
           .attr("class", "outlier")
           .attr("r", 5)
           .attr("cx", width / 2)
-          .attr("cy", function(i) { return x1(d[i]); })
+          .attr("cy", function(i) { return x1(i); })
           .style("opacity", 1);
 
 
@@ -172,6 +166,12 @@ d3.box = function() {
     d3.timerFlush();
   }
 
+  box.marker = function(x) {
+    if (!arguments.length) return marker;
+    marker = x;
+    return box;
+  };
+
   box.width = function(x) {
     if (!arguments.length) return width;
     width = x;
@@ -187,12 +187,6 @@ d3.box = function() {
   box.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
     tickFormat = x;
-    return box;
-  };
-
-  box.duration = function(x) {
-    if (!arguments.length) return duration;
-    duration = x;
     return box;
   };
 
@@ -244,16 +238,15 @@ function boxQuartiles(d) {
 })();
 //end box.js
 
-renderBoxplot = function(subjectData, domid) {
-  console.log(subjectData);
-var labels = true; // show the text labels beside individual boxplots?
+renderBoxplot = function(subjectData, participantMetrics, domid) {
+  var labels = true; // show the text labels beside individual boxplots?
 
-var margin = {top: 30, right: 50, bottom: 70, left: 50};
-var  width = 800 - margin.left - margin.right;
-var height = 400 - margin.top - margin.bottom;
-  
-var min = Infinity,
-    max = -Infinity;
+  var margin = {top: 30, right: 50, bottom: 70, left: 50};
+  var  width = 800 - margin.left - margin.right;
+  var height = 400 - margin.top - margin.bottom;
+    
+  var min = Infinity,
+      max = -Infinity;
   
 // parse in the data  
 d3.csv("/data.csv", function(error, csv) {
@@ -267,6 +260,9 @@ d3.csv("/data.csv", function(error, csv) {
   var metrics = ['CNR', 'EFC', 'FBER', 'FWHM', 'SNR'];
   var min = Infinity;
   var max = -Infinity;
+
+  var marks = [ [participantMetrics['CNR']], [participantMetrics['EFC']], 
+    [participantMetrics['FBER']], [participantMetrics['FWHM']],[participantMetrics['SNR']]];
   
   for (var i = 0; i < metrics.length; i++) {
     data[i] = [];
@@ -285,14 +281,8 @@ d3.csv("/data.csv", function(error, csv) {
     max = Math.max(localMax, max);
   };
 
-  console.log('min: ', min);
-    console.log('max: ', max);
-
-  
-  console.log(data);
-
   // var data = [];
-  // data[0] = [];
+  // data[0] = [];6
   // data[1] = [];
   // data[2] = [];
   // data[3] = [];
@@ -303,7 +293,7 @@ d3.csv("/data.csv", function(error, csv) {
   // data[1][0] = "Q2";
   // data[2][0] = "Q3";
   // data[3][0] = "Q4";
-  // // add more rows if your csv file has more columns
+  // // add more rows if your csv4 file has more columns
 
   // data[0][1] = [];
   // data[1][1] = [];
@@ -334,6 +324,8 @@ d3.csv("/data.csv", function(error, csv) {
     .whiskers(iqr(1.5))
     .height(height) 
     .domain([min, max])
+    //.marker([[10], [100], [200], [250], [320]])
+    .marker(marks)
     .showLabels(labels);
 
   var svg = d3.select(domid).append("svg")
@@ -345,7 +337,7 @@ d3.csv("/data.csv", function(error, csv) {
   
   // the x-axis
   var x = d3.scaleBand()   
-    .domain( data.map(function(d) { console.log(d); return d[0] } ) )     
+    .domain( data.map(function(d) { return d[0] } ) )     
     .range([0 , width], 0.7, 0.3);    
 
   var xAxis = d3.axisBottom(x);
@@ -357,16 +349,12 @@ d3.csv("/data.csv", function(error, csv) {
   
   var yAxis = d3.axisLeft(y);
 
-  console.log('antes box');
-
   //draw the boxplots  
   svg.selectAll(".box")    
       .data(data)
     .enter().append("g")
-    .attr("transform", function(d) { var aa = x(d[0])+ x.bandwidth()*0.3; console.log('aa: '+ aa);  return "translate(" +  aa  + "," + margin.top + ")"; } )
+    .attr("transform", function(d) { var aa = x(d[0])+ x.bandwidth()*0.3;  return "translate(" +  aa  + "," + margin.top + ")"; } )
       .call(chart.width(x.bandwidth()*0.4)); 
-  
-  console.log('depois box');
 
   // add a title
   svg.append("text")
@@ -375,7 +363,7 @@ d3.csv("/data.csv", function(error, csv) {
         .attr("text-anchor", "middle")  
         .style("font-size", "18px") 
         //.style("text-decoration", "underline")  
-        .text("RMetrics");
+        .text("Metrics");
  
    // draw y axis
   svg.append("g")

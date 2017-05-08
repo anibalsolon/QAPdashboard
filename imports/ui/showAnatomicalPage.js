@@ -48,15 +48,16 @@ showAnatomicalImage = function() {
     params["sub-0050003_ses-1_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
   }
 
-  // papaya.Container.addViewer("imageDisplay", params, function(err, params){
-  //                                       console.log('papaya callback', err, params)
-  //                                       });
-  // papaya.Container.allowPropagation = true;
+  papaya.Container.addViewer("imageDisplay", params, function(err, params){
+                                        console.log('papaya callback', err, params)
+                                        });
+  papaya.Container.allowPropagation = true;
 }
 
 boxplot = function() {
-  var projection = {'_id':0,'CNR':1, 'EFC':1, 'FBER':1, 'FWHM':1, 'SNR':1};  
+  var projection = {'_id':0,'CNR':1, 'EFC':1, 'FBER':1, 'FWHM':1, 'SNR':1, 'Participant':1};  
   var allSubjects = Anatomical.find({},{fields:projection}).fetch();
-
-  renderBoxplot(allSubjects, "#individualAnatBoxplot");
+  var participantId = "58ff96336f50a134f7871863";
+  var participantMetrics = Anatomical.findOne({'_id': new Mongo.ObjectID(participantId) }, {fields:projection});
+  renderBoxplot(allSubjects, participantMetrics, "#individualAnatBoxplot");
 }

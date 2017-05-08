@@ -19,7 +19,7 @@
 }
 
 .box .outlier {
-  fill: none;
+  fill: #ffff00;
   stroke: #000;
 }
 
