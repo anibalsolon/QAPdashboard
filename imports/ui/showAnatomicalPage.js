@@ -11,6 +11,7 @@ Template.showAnatomicalPage.events({
     var  overlayName = ""+ $(event.currentTarget).val();
     const instance = Template.instance();
     instance.state.set(overlayName, overlayVal);
+    showAnatomicalImage();
   },
 });
 
@@ -27,9 +28,10 @@ Template.showAnatomicalPage.rendered = function() {
   }
 
   boxplot();
+  showAnatomicalImage();
 
   this.autorun(function(){
-    showAnatomicalImage();
+    console.log('autorun');
   });
 }
 

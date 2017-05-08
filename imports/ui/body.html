@@ -1,6 +1,25 @@
 <template name="App_body">
 
-{{> Template.dynamic template=main}}  
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">QAP</a>
+    </div>
+    
+    	
+      <ul class="nav navbar-nav nav-center">
+        <li class="active"><a href="#">Anatomical Dashboard</a></li>
+        <li class=""><a href="#">Functional Dashborad</a></li>
+        <li><a href="#">sub-000000</a></li>
+        <li><a href="#">previous</a></li>
+        <li><a href="#">next</a></li>
+      </ul>
 
+      <ul class="nav navbar-nav navbar-right">
+      	<li><a href="#">github</a></li>
+      </ul>
+  </div>
+</nav>
+
+  {{> Template.dynamic template=main}}  
 </template>
-<!--   {{> anatomical}} -->
