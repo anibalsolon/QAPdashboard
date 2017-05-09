@@ -66,7 +66,9 @@ boxplot = function() {
     var allSubjects = Anatomical.find({},{fields:projection}).fetch();
     var participantId = "58ff96336f50a134f7871863";
     var participantMetrics = Anatomical.findOne({'_id': new Mongo.ObjectID(participantId) }, {fields:projection});
-    renderBoxplot(allSubjects, participantMetrics, metrics[i], "#anatBoxplot"+metrics[i]);
+
+    var chartSize = ($("#boxplotContainer").width() / 5);
+    renderBoxplot(allSubjects, participantMetrics, metrics[i], "#anatBoxplot"+metrics[i], chartSize);
   };
 
 }

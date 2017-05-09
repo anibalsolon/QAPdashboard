@@ -238,15 +238,12 @@ function boxQuartiles(d) {
 })();
 //end box.js
 
-renderBoxplot = function(subjectData, participantMetrics, metric, domid) {
+renderBoxplot = function(subjectData, participantMetrics, metric, domid, figureSize) {
   var labels = true; // show the text labels beside individual boxplots?
 
   var margin = {top: 30, right: 50, bottom: 70, left: 50};
-  var  width = 150 - margin.left - margin.right;
+  var  width = figureSize - margin.left - margin.right;
   var height = 400 - margin.top - margin.bottom;
-    
-  var min = Infinity,
-      max = -Infinity;
   
 // parse in the data  
 d3.csv("/data.csv", function(error, csv) {

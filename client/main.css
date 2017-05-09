@@ -29,9 +29,21 @@
     display: inline-block; 
 }
 
-
-
 h1{
 	margin-top: 8%;
 	margin-bottom: 2%;
 }
+
+#boxplotContainer div{
+	max-width: 18%;
+}
+
+/*#boxplotContainer{
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+#boxplotContainer svg{
+	margin-left: 20px;
+	margin-right: 20px;
+}*/
