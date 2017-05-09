@@ -57,9 +57,16 @@ showAnatomicalImage = function() {
 }
 
 boxplot = function() {
-  var projection = {'_id':0,'CNR':1, 'EFC':1, 'FBER':1, 'FWHM':1, 'SNR':1, 'Participant':1};  
-  var allSubjects = Anatomical.find({},{fields:projection}).fetch();
-  var participantId = "58ff96336f50a134f7871863";
-  var participantMetrics = Anatomical.findOne({'_id': new Mongo.ObjectID(participantId) }, {fields:projection});
-  renderBoxplot(allSubjects, participantMetrics, "#individualAnatBoxplot");
+  var metrics = ['CNR', 'EFC', 'FBER', 'FWHM', 'SNR'];
+  for (var i = 0; i < metrics.length; i++) {
+    var projection = {};
+    projection[metrics[i]] = 1;
+    projection['_id'] = 0;
+
+    var allSubjects = Anatomical.find({},{fields:projection}).fetch();
+    var participantId = "58ff96336f50a134f7871863";
+    var participantMetrics = Anatomical.findOne({'_id': new Mongo.ObjectID(participantId) }, {fields:projection});
+    renderBoxplot(allSubjects, participantMetrics, metrics[i], "#anatBoxplot"+metrics[i]);
+  };
+
 }

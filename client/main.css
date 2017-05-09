@@ -3,6 +3,7 @@
 	margin-left: 15px;
 }
 
+/*start navbar*/
 .lastItem{ padding-right: 20px; padding-bottom: 0px; font-size: 32px;}
 #github{padding-bottom: 0px;}
 
@@ -17,13 +18,16 @@
 
 #mainMenu ul li { display: inline; margin-right: 20px; }
 
-
 .active{
 	background-color: #178acc;
 	color: #fff;
 	padding: 15px;
 }
+/*end navbar*/
 
+.inline { 
+    display: inline-block; 
+}
 
 
 

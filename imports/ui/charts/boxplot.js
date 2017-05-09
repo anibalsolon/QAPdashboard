@@ -20,7 +20,7 @@ d3.box = function() {
       whiskers = boxWhiskers,
       quartiles = boxQuartiles,
     showLabels = true, // whether or not to show text labels
-    numBars = 5,
+    numBars = 1,
     curBar = 1,
       tickFormat = null;
 
@@ -238,11 +238,11 @@ function boxQuartiles(d) {
 })();
 //end box.js
 
-renderBoxplot = function(subjectData, participantMetrics, domid) {
+renderBoxplot = function(subjectData, participantMetrics, metric, domid) {
   var labels = true; // show the text labels beside individual boxplots?
 
   var margin = {top: 30, right: 50, bottom: 70, left: 50};
-  var  width = 800 - margin.left - margin.right;
+  var  width = 150 - margin.left - margin.right;
   var height = 400 - margin.top - margin.bottom;
     
   var min = Infinity,
@@ -256,75 +256,22 @@ d3.csv("/data.csv", function(error, csv) {
   // data[i][0] = name of the ith column
   // data[i][1] = array of values of ith column
 
-  var data = [];
-  var metrics = ['CNR', 'EFC', 'FBER', 'FWHM', 'SNR'];
-  var min = Infinity;
-  var max = -Infinity;
+  var marks = [ [participantMetrics[metric]] ];
 
-  var marks = [ [participantMetrics['CNR']], [participantMetrics['EFC']], 
-    [participantMetrics['FBER']], [participantMetrics['FWHM']],[participantMetrics['SNR']]];
-  
-  for (var i = 0; i < metrics.length; i++) {
-    data[i] = [];
-  };
+  clean = _.chain(subjectData)
+  .pluck(metric)
+  .flatten()
+  .value();
 
-  for (var i = 0; i < metrics.length; i++) {
-    clean = _.chain(subjectData)
-    .pluck(metrics[i])
-    .flatten()
-    .value();
-    data[i] = [metrics[i], clean];
+  data = [];
+  data[0] = [metric, clean];
+  var min = Math.min.apply(null, clean);
+  var max = Math.max.apply(null, clean);
 
-    var localMin = Math.min.apply(null, clean);
-    min = Math.min(localMin, min);
-    var localMax = Math.max.apply(null, clean);
-    max = Math.max(localMax, max);
-  };
-
-  // var data = [];
-  // data[0] = [];6
-  // data[1] = [];
-  // data[2] = [];
-  // data[3] = [];
-  // // add more rows if your csv file has more columns
-
-  // // add here the header of the csv file
-  // data[0][0] = "Q1";
-  // data[1][0] = "Q2";
-  // data[2][0] = "Q3";
-  // data[3][0] = "Q4";
-  // // add more rows if your csv4 file has more columns
-
-  // data[0][1] = [];
-  // data[1][1] = [];
-  // data[2][1] = [];
-  // data[3][1] = [];
-  // csv.forEach(function(x) {
-  //   var v1 = Math.floor(x.Q1),
-  //     v2 = Math.floor(x.Q2),
-  //     v3 = Math.floor(x.Q3),
-  //     v4 = Math.floor(x.Q4);
-  //     // add more variables if your csv file has more columns
-      
-  //   var rowMax = Math.max(v1, Math.max(v2, Math.max(v3,v4)));
-  //   var rowMin = Math.min(v1, Math.min(v2, Math.min(v3,v4)));
-
-  //   data[0][1].push(v1);
-  //   data[1][1].push(v2);
-  //   data[2][1].push(v3);
-  //   data[3][1].push(v4);
-  //    // add more rows if your csv file has more columns
-     
-  //   if (rowMax > max) max = rowMax;
-  //   if (rowMin < min) min = rowMin; 
-  // });
-  //     console.log(data);
-  
   var chart = d3.box()
     .whiskers(iqr(1.5))
     .height(height) 
     .domain([min, max])
-    //.marker([[10], [100], [200], [250], [320]])
     .marker(marks)
     .showLabels(labels);
 
@@ -357,13 +304,13 @@ d3.csv("/data.csv", function(error, csv) {
       .call(chart.width(x.bandwidth()*0.4)); 
 
   // add a title
-  svg.append("text")
-        .attr("x", (width / 2))             
-        .attr("y", 0 + (margin.top / 2))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "18px") 
-        //.style("text-decoration", "underline")  
-        .text("Metrics");
+  // svg.append("text")
+  //       .attr("x", (width / 2))             
+  //       .attr("y", 0 + (margin.top / 2))
+  //       .attr("text-anchor", "middle")  
+  //       .style("font-size", "18px") 
+  //       //.style("text-decoration", "underline")  
+  //       .text("Metric");
  
    // draw y axis
   svg.append("g")

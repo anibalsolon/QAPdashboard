@@ -1,7 +1,7 @@
 <template name="showAnatomicalPage">
 <div id="showAnatomicalPageDiv" class="container">
-  <h1>Anatomical Dashboard: sub-000000_ses-02</h1>
-
+  <!-- <h1>Anatomical Dashboard: sub-000000_ses-02</h1> -->
+  <h1></h1>
   <div class="row">
     <div class="text-left">
       <input type="checkbox" name="csfCb" value="showCsf" checked> Cerebrospinal fluid
@@ -13,7 +13,11 @@
   </div>
 
   <div class="row text-center">
-    <svg id="individualAnatBoxplot" width="100%" height="600px"></svg>
+    <div class="inline"> <svg id="anatBoxplotCNR" width="100%" height="500px"></svg></div>
+    <div class="inline"><svg id="anatBoxplotEFC" width="100%" height="500px"></svg></div>
+    <div class="inline"><svg id="anatBoxplotFBER" width="100%" height="500px"></svg></div>
+    <div class="inline"><svg id="anatBoxplotFWHM" width="100%" height="500px"></svg></div>
+    <div class="inline"><svg id="anatBoxplotSNR" width="100%" height="500px"></svg></div>
   </div>
 
 </div>
