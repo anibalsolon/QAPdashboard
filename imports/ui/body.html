@@ -10,11 +10,14 @@
 
     <div id="mainMenu">
 	    <ul class="navbar navbar-default navbar-brand">
-	    	<li><a href="#">Anatomical Dashboard</a></li>
-	    	<li><a href="#">Functional Dashboard</a></li>
-	    	<li> <a href="#" title="previous: sub-000000_ses-01"><i class="fa fa-arrow-left" aria-hidden="true"></i></a> </li>
-	    	<li><a href="#" class="nav-link active">sub-000000_ses-02 anatomical</a></li>
-	    	<li> <a href="#" title="next: sub-000001_ses-01"><i class="fa fa-arrow-right" aria-hidden="true"></i></a> </li>
+	    	<li><a class="  {{ isAnatomicalPage }}  " href="/anatomical">Anatomical Dashboard</a></li>
+	    	<li><a class="  {{ isFunctionalPage }}  " href="/functional">Functional Dashboard</a></li>
+
+        {{#if isIndividualPage  }}
+          <li> <a href="#" title="previous: sub-000000_ses-01"><i class="fa fa-arrow-left" aria-hidden="true"></i></a> </li>
+        <li><a href="#" class="nav-link activePage">sub-000000_ses-02 anatomical</a></li>
+        <li> <a href="#" title="next: sub-000001_ses-01"><i class="fa fa-arrow-right" aria-hidden="true"></i></a> </li>
+        {{/if}}
 	    </ul>
     </div>    
     

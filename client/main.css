@@ -18,7 +18,7 @@
 
 #mainMenu ul li { display: inline; margin-right: 20px; }
 
-.active{
+.activePage{
 	background-color: #178acc;
 	color: #fff;
 	padding: 15px;
@@ -30,8 +30,8 @@
 }
 
 h1{
-	margin-top: 8%;
-	margin-bottom: 2%;
+	margin-top: 80px;
+	margin-bottom: 15px;
 }
 
 #boxplotContainer div{
