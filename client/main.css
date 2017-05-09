@@ -2,3 +2,32 @@
 #showAnatomicalPageDiv input{
 	margin-left: 15px;
 }
+
+.lastItem{ padding-right: 20px; padding-bottom: 0px; font-size: 32px;}
+#github{padding-bottom: 0px;}
+
+.navbar-brand
+{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin:0 auto;
+}
+
+#mainMenu ul li { display: inline; margin-right: 20px; }
+
+
+.active{
+	background-color: #178acc;
+	color: #fff;
+	padding: 15px;
+}
+
+
+
+
+h1{
+	margin-top: 8%;
+	margin-bottom: 2%;
+}
