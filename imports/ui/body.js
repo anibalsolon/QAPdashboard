@@ -4,7 +4,6 @@ import { Anatomical } from '../api/anatomical.js';
 import './anatomical.js';
 import './functional.js';
 import './showAnatomicalPage.js';
-import './topNav.html';
 import './body.html';
 
 Template.App_body.helpers({
