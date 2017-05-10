@@ -18,10 +18,14 @@
 
 #mainMenu ul li { display: inline; margin-right: 20px; }
 
-.activePage{
+.activePage, .activePage:visited{
 	background-color: #178acc;
 	color: #fff;
+	text-decoration: none;
 	padding: 15px;
+}
+.activePage:focus{
+	text-decoration: none;
 }
 /*end navbar*/
 
@@ -38,12 +42,10 @@ h1{
 	max-width: 18%;
 }
 
-/*#boxplotContainer{
-	margin-top: 30px;
-	margin-bottom: 30px;
+#circle{
+	background: #ff0;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1px solid #000;
 }
-
-#boxplotContainer svg{
-	margin-left: 20px;
-	margin-right: 20px;
-}*/

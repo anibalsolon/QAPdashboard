@@ -2,9 +2,14 @@
 <div id="showAnatomicalPageDiv" class="container">
   <!-- <h1>Anatomical Dashboard: sub-000000_ses-02</h1> -->
   <h1></h1>
+  <h2>Anatomical Image and Masks - {{ subjectId }}  </h2>
+  <p>This is the anatomical preprocessed image created by the workflow. 
+    This image can be used to eyeball the quality of the overall signal in the anatomical scan, 
+    as it will be obvious if there were any problem areas where there was signal dropout 
+    resulting from a bad shim or other sources of signal distortion.</p>
   <div class="row">
     <div class="text-left">
-      <input type="checkbox" name="csfCb" value="showCsf" checked> Cerebrospinal fluid
+      <input type="checkbox" name="csfCb" value="showCsf" checked> Cerebrospinal Fluid
       <input type="checkbox" name="gmCb" value="showGm" checked> Gray Matter
       <input type="checkbox" name="wmCb" value="showWm" checked> White Matter 
       <input type="checkbox" name="wmCb" value="showWm" checked> Artifact Background 
@@ -12,14 +17,31 @@
     <div id="imageDisplay" class="text-left"></div>
   </div>
 
-  <div id="boxplotContainer" class="row text-center">
+  <h2>QAP Anatomical Measures</h2>
+  <span>The spatial metrics computed on the anatomical scan are displayed as boxplots. The <div id="circle" class="inline"></div> in these plots denote where the score for the scans for this
+participant fall in the distribution of all scores for scans that were included as inputs to the anatomical-spatial workflow.</span>
 
+  <p>
+  <br>
+  The metrics computed are as follows:
+    <ul>
+      <li> <strong>CNR</strong> - Contrast to Noise Ratio</li>
+      <li> <strong>EFC</strong> - Entropy Focus Criterion</li>
+      <li> <strong>FBER</strong> - Foreground to Background Energy Ratio</li>
+      <li><strong>FWHM</strong> - Full-width half maximum smoothness of the voxels averaged across the three coordinate axes, and also for each axis [x,y,x]</li>
+      <li><strong>SNR</strong> - Signal to Noise Ratio</li>
+    </ul>
+  </p>
+  <p>All metrics are described in more detail in the <a href="http://preprocessed-connectomes-project.org/quality-assessment-protocol/#spatial-anatomical">QAP documentation</a>.</p>
+
+  <div id="boxplotContainer" class="row text-center">
     <div class="col inline"> <svg id="anatBoxplotCNR" width="90%" height="450px"></svg></div>
     <div class="col inline"><svg id="anatBoxplotEFC" width="90%" height="450px"></svg></div>
     <div class="col inline"><svg id="anatBoxplotFBER" width="90%" height="450px"></svg></div>
     <div class="col inline"><svg id="anatBoxplotFWHM" width="90%" height="450px"></svg></div>
     <div class="col inline"><svg id="anatBoxplotSNR" width="90%" height="450px"></svg></div>
   </div>
+  
 
 </div>
 </template>
