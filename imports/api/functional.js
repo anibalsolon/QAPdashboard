@@ -6,11 +6,11 @@ import moment from 'moment';
 
 //mongoimport -d meteor -c functionalSpatial --port 3001 --type csv
 // --file /home/caroline/Documents/2qap_run/qap_functional_spatial.csv --headerline
-export const Functional = new Mongo.Collection('functionalSpatial');
+export const FunctionalSpatial = new Mongo.Collection('functionalSpatial');
 
 new Tabular.Table({
   name: "FunctionalSpatialTable",
-  collection: Functional,
+  collection: FunctionalSpatial,
   columns: [
     {
       data: "Participant", 
@@ -38,5 +38,44 @@ new Tabular.Table({
         }
       }
 	},
+  ]
+});
+
+
+//mongoimport -d meteor -c functionalTemporal --port 3001 --type csv 
+//--file /home/caroline/Documents/2qap_run/qap_functional_temporal.csv --headerline
+export const FunctionalTemporal = new Mongo.Collection('functionalTemporal');
+
+new Tabular.Table({
+  name: "FunctionalTemporalTable",
+  collection: FunctionalTemporal,
+  columns: [
+    {
+      data: "Participant", 
+      title: "Subject",
+      render: function (val, type, doc) {
+        return '<a href="/showFunctional/'+val+'">'+val+'</a>';
+      }
+    },
+    {data: "Session", title: "Session"},
+    {data: "Series", title: "Series"},
+    {data: "tr", title: "TR"},
+    {data: "Fraction of Outliers (Mean)", title: "Fraction of Outliers"},
+    {data: "GCOR", title: "GCOR"},
+    {data: "Quality (Mean)", title: "Quality"},
+    {data: "RMSD (Mean)", title: "RMSD"},
+    {data: "Signal Fluctuation Sensitivity (Mean)", title: "SFS"},
+    {data: "Std DVARS (Mean)", title: "DVARS"},
+    {
+      data: "Time", 
+      title: "Time",
+      render: function (val, type, doc) {
+        if (val instanceof Date) {
+          return moment(val).calendar();
+        } else {
+          return val;
+        }
+      }
+  },
   ]
 });
