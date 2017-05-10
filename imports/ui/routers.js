@@ -20,8 +20,15 @@ FlowRouter.route('/functional', {
 });
 
 FlowRouter.route('/showAnatomical/:subjectid', {
-  name: 'subject.show',
+  name: 'anatomicalSubject.show',
   action() {
     BlazeLayout.render('App_body', {main: 'showAnatomicalPage'});
+  }
+});
+
+FlowRouter.route('/showFunctional/:subjectid', {
+  name: 'functionalSubject.show',
+  action() {
+    BlazeLayout.render('App_body', {main: 'showFunctionalPage'});
   }
 });

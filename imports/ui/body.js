@@ -4,12 +4,13 @@ import { Anatomical } from '../api/anatomical.js';
 import './anatomical.js';
 import './functional.js';
 import './showAnatomicalPage.js';
+import './showFunctionalPage.js';
 import './body.html';
 
 Template.App_body.helpers({
   isIndividualPage(){
   	var current = FlowRouter.getRouteName();
-  	return current == 'subject.show';
+  	return current == 'anatomicalSubject.show' || current == 'functionalSubject.show';
   },
   isAnatomicalPage(){
   	var current = FlowRouter.getRouteName();
