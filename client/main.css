@@ -29,6 +29,11 @@
 }
 /*end navbar*/
 
+#footer{
+	padding-top: 15px;
+    margin-bottom: -10px;
+}
+
 .inline { 
     display: inline-block; 
 }

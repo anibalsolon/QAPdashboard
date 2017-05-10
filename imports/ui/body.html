@@ -32,7 +32,17 @@
     </ul>
   </div>
 </nav>
+  {{> Template.dynamic template=main}}
 
+  <footer>
+    <nav id="footer" class="navbar navbar-default navbar-bottom">
 
-  {{> Template.dynamic template=main}}  
+      <div class="container text-center">
+      <p> <a href="http://preprocessed-connectomes-project.org/">Preprocessed Connectomes Project</a> - <a href="http://preprocessed-connectomes-project.org/quality-assessment-protocol/">Quality Assessment Protocol</a> </p>
+      <p> &copy; All rights reserved</p>
+      <p><a href="https://github.com/preprocessed-connectomes-project/quality-assessment-protocol"><i class="fa fa-github fa-2x" aria-hidden="true"></i></a></p>
+      </div>
+
+    </nav>
+  </footer>
 </template>
