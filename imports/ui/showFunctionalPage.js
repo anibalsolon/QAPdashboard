@@ -1,13 +1,14 @@
 import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
-//import { Anatomical } from '../api/functional.js';
+import { FunctionalSpatial } from '../api/functional.js';
 import './showFunctionalPage.html';
+import './charts/boxplot.css';    
+import './charts/boxplot.js';
 
 
 Template.showFunctionalPage.helpers({
   subjectId(){
     var subjectId = FlowRouter.getParam("subjectid");
-    console.log(subjectId);
     return subjectId;
   },
 });
@@ -32,6 +33,7 @@ Template.showFunctionalPage.rendered = function() {
   if(!this._rendered) {
     this._rendered = true;
   }
+  funcBoxplot();
   showFunctionalImage();
 
   this.autorun(function(){
@@ -60,4 +62,22 @@ showFunctionalImage = function() {
                                         console.log('papaya callback', err, params)
                                         });
   papaya.Container.allowPropagation = true;
+}
+
+funcBoxplot = function() {
+  var subjectId = FlowRouter.getParam("subjectid");
+
+  var metrics = ['EFC', 'FBER', 'FWHM', 'SNR', 'Ghost_y'];
+  for (var i = 0; i < metrics.length; i++) {
+    var projection = {};
+    projection[metrics[i]] = 1;
+    projection['_id'] = 0;
+
+    var allSubjects = FunctionalSpatial.find({},{fields:projection}).fetch();
+    var participantMetrics = FunctionalSpatial.findOne({'Participant': subjectId }, {fields:projection});
+
+    var chartSize = ($("#boxplotSpatialContainer").width() / 5);
+
+    renderBoxplot(allSubjects, participantMetrics, metrics[i], "#funcBoxplot"+metrics[i], chartSize);
+  };
 }

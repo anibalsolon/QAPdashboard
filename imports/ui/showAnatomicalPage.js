@@ -8,11 +8,8 @@ import './charts/boxplot.js';
 Template.showAnatomicalPage.helpers({
   subjectId(){
     var subjectId = FlowRouter.getParam("subjectid");
-    console.log(subjectId);
     return subjectId;
-
   },
-
 });
 
 Template.showAnatomicalPage.events({
@@ -38,7 +35,7 @@ Template.showAnatomicalPage.rendered = function() {
     this._rendered = true;
   }
 
-  boxplot();
+  anatBoxplot();
   showAnatomicalImage();
 
   this.autorun(function(){
@@ -83,7 +80,7 @@ showAnatomicalImage = function() {
   papaya.Container.allowPropagation = true;
 }
 
-boxplot = function() {
+anatBoxplot = function() {
   var subjectId = FlowRouter.getParam("subjectid");
 
   var metrics = ['CNR', 'EFC', 'FBER', 'FWHM', 'SNR'];

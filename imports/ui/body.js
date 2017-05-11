@@ -12,6 +12,17 @@ Template.App_body.helpers({
   	var current = FlowRouter.getRouteName();
   	return current == 'anatomicalSubject.show' || current == 'functionalSubject.show';
   },
+  pageName(){
+    var current = FlowRouter.getRouteName();
+    var subjectId = FlowRouter.getParam("subjectid");
+    if (current == 'anatomicalSubject.show') {
+      return subjectId + ' anatomical';
+    }
+    else{
+      return subjectId + ' functional';
+    }
+  },
+
   isAnatomicalPage(){
   	var current = FlowRouter.getRouteName();
   	if (current == 'anatomical') {return "activePage"};

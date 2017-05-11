@@ -51,6 +51,10 @@ h1{
 	max-width: 18%;
 }
 
+#boxplotSpatialContainer div{
+	max-width: 18%;
+}
+
 #circle{
 	background: #ff0;
     width: 15px;
