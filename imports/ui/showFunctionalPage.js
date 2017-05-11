@@ -4,6 +4,30 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 import './showFunctionalPage.html';
 
 
+Template.showFunctionalPage.helpers({
+  subjectId(){
+    var subjectId = FlowRouter.getParam("subjectid");
+    console.log(subjectId);
+    return subjectId;
+  },
+});
+
+Template.showFunctionalPage.events({
+  "click input": function(event, template){
+    var overlayVal = ""+ $(event.currentTarget).is(':checked');
+    var  overlayName = ""+ $(event.currentTarget).val();
+    const instance = Template.instance();
+    instance.state.set(overlayName, overlayVal);
+    showFunctionalImage();
+  },
+});
+
+Template.showFunctionalPage.onCreated(function anatomicalOnCreated() {
+  this.state = new ReactiveDict();
+  const instance = Template.instance();
+  instance.state.set("showSfs", 'true');
+});
+
 Template.showFunctionalPage.rendered = function() {
   if(!this._rendered) {
     this._rendered = true;
@@ -24,27 +48,15 @@ showFunctionalImage = function() {
   var meanFile = base + subjectId +"_ses-1_bold_task-rest_mean-functional.nii.gz";
   params["images"] = [meanFile];
 
-  // const instance = Template.instance();
-  // if(instance.state.get("showCsf") === 'true'){
-  //   var csfFile = base + subjectId +"_ses-1_T1w_anatomical-csf-mask.nii.gz";
-  //   params["images"].push(csfFile);
-  //   params[subjectId +"_ses-1_T1w_anatomical-csf-mask.nii.gz"] = {lut: "Gold"};
-  //   console.log(csfFile);
-  // }
-  // if(instance.state.get("showGm") === 'true'){
-  //   var gmFile = base + subjectId +"_ses-1_T1w_anatomical-gm-mask.nii.gz";
-  //   params["images"].push(gmFile);
-  //   params[subjectId +"_ses-1_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
-  //   console.log(gmFile);
-  // }
-  // if(instance.state.get("showWm") === 'true'){
-  //   var wmFile = base + subjectId +"_ses-1_T1w_anatomical-wm-mask.nii.gz";
-  //   params["images"].push(wmFile);
-  //   params[subjectId +"_ses-1_T1w_anatomical-wm-mask.nii.gz"] = {lut: "Grayscale"};
-  //   console.log(wmFile);
-  // }
+  const instance = Template.instance();
+  if(instance.state.get("showSfs") === 'true'){
+    var sfSFile = base + subjectId +"_ses-1_bold_task-rest_SFS.nii.gz";
+    params["images"].push(sfSFile);
+    params[subjectId +"_ses-1_bold_task-rest_SFS.nii.gz"] = {lut: "Gold"};
+    console.log(sfSFile);
+  }
 
-  papaya.Container.addViewer("imageDisplay", params, function(err, params){
+  papaya.Container.addViewer("funcImageDisplay", params, function(err, params){
                                         console.log('papaya callback', err, params)
                                         });
   papaya.Container.allowPropagation = true;

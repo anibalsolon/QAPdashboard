@@ -2,12 +2,20 @@
 <div id="showFunctionalPageDiv" class="container">
 
 <h1></h1>
-<h2>Hey</h2>
+<h2>Mean Fucntional Image and Derivatives - {{ subjectId }}  </h2>
   <div class="row">
     <div class="text-left">
       <input type="checkbox" name="sfsCb" value="showSfs" checked> Signal Fluctuation Sensitivity
     </div>
-    <div id="imageDisplay" class="text-left"></div>
+    <div id="funcImageDisplay" class="text-left"></div>
+  </div>
+
+    <div id="boxplotContainer" class="row text-center">
+    <div class="col inline"> <svg id="anatBoxplotCNR" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="anatBoxplotEFC" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="anatBoxplotFBER" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="anatBoxplotFWHM" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="anatBoxplotSNR" width="90%" height="450px"></svg></div>
   </div>
 
 </div>
