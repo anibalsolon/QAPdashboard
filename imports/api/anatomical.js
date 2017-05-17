@@ -4,6 +4,10 @@ import { Mongo } from 'meteor/mongo';
 import Tabular from 'meteor/aldeed:tabular';
 import moment from 'moment';
 
+//
+//mongoimport -d meteor -c anatomical --port 3001 --type csv 
+//--file /home/caroline/Documents/2qap_run/qap_anatomical_spatial.csv --headerline
+
 export const Anatomical = new Mongo.Collection('anatomical');
 
 new Tabular.Table({
@@ -14,7 +18,8 @@ new Tabular.Table({
       data: "Participant", 
       title: "Subject",
       render: function (val, type, doc) {
-        return '<a href="/showAnatomical/'+val+'">'+val+'</a>';
+        var subid = doc.Participant +"_"+ doc.Session;
+        return '<a href="'+subid+'">'+subid+'</a>';
       }
     },
     {data: "Session", title: "Session"},

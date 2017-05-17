@@ -5,6 +5,12 @@ import './anatomical.html';
 import './charts/histogram.js';
 import './charts/histogram.css';
 
+Anatomical.helpers({
+  subjectUrl: function(){
+    return this.Participant+'_'+ this.Session;
+  },
+});
+
 Template.anatomical.helpers({
   anatomical(){
     return Anatomical.find({});

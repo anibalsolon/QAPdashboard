@@ -14,13 +14,14 @@ new Tabular.Table({
   columns: [
     {
       data: "Participant", 
-      title: "Subject",
+      title: "Scan",
       render: function (val, type, doc) {
-        return '<a href="/showFunctional/'+val+'">'+val+'</a>';
+        var subid = doc.Participant +"_"+ doc.Session + "_" + doc.Series;
+        return '<a href="/showFunctional/'+subid+'">'+subid+'</a>';
       }
     },
-    {data: "Session", title: "Session"},
-    {data: "Series", title: "Series"},
+    {data: "Session", title: "Session", visible:false},
+    {data: "Series", title: "Series", visible:false},
     {data: "tr", title: "TR"},
     {data: "EFC", title: "EFC"},
     {data: "FBER", title: "FBER"},
@@ -54,7 +55,8 @@ new Tabular.Table({
       data: "Participant", 
       title: "Subject",
       render: function (val, type, doc) {
-        return '<a href="/showFunctional/'+val+'">'+val+'</a>';
+        var subid = doc.Participant +"_"+ doc.Session + "_" + doc.Series;
+        return '<a href="/showFunctional/'+subid+'">'+subid+'</a>';
       }
     },
     {data: "Session", title: "Session"},

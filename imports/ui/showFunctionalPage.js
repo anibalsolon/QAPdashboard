@@ -13,8 +13,11 @@ Template.showFunctionalPage.helpers({
   },
   grayplotImg(){
     var subjectId = FlowRouter.getParam("subjectid");
-    var base = "/"+ subjectId +"/"+ "ses-1/";
-    return base + subjectId +"_ses-1_bold_task-rest_timeseries-measures.png";
+    var sub = subjectId.split('_')[0]
+    var sess = subjectId.split('_')[1]
+    var scan = subjectId.split('_')[2]
+    var base = "/"+ sub +"/"+sess + "/";
+    return base + subjectId +"_timeseries-measures.png";
   }
 });
 
@@ -50,35 +53,37 @@ Template.showFunctionalPage.rendered = function() {
 
 showFunctionalImage = function() {
   var subjectId = FlowRouter.getParam("subjectid");
+  var sub = subjectId.split('_')[0]
+  var sess = subjectId.split('_')[1]
+  var scan = subjectId.split('_')[2]
+  var base = "/"+ sub +"/"+sess + "/";
 
   var params = {};
   //add all images in the public directory
-  //all subjects go to session 1 for now
-  var base = "/"+ subjectId +"/"+ "ses-1/";
-  var meanFile = base + subjectId +"_ses-1_bold_task-rest_mean-functional.nii.gz";
+  var meanFile = base + subjectId +"_mean-functional.nii.gz";
   params["images"] = [meanFile];
 
   const instance = Template.instance();
   if(instance.state.get("showSfs") === 'true'){
-    var f = base + subjectId +"_ses-1_bold_task-rest_SFS.nii.gz";
+    var f = base + subjectId +"_SFS.nii.gz";
     params["images"].push(f);
-    params[subjectId +"_ses-1_bold_task-rest_SFS.nii.gz"] = {lut: "Gold"};
+    params[subjectId +"_SFS.nii.gz"] = {lut: "Gold"};
   }
   if(instance.state.get("showTstd") === 'true'){
-    var f = base + subjectId +"_ses-1_bold_task-rest_temporal-std-map.nii.gz";
+    var f = base + subjectId +"_temporal-std-map.nii.gz";
     params["images"].push(f);
-    params[subjectId +"_ses-1_bold_task-rest_temporal-std-map.nii.gz"] = {lut: "Spectrum"};
+    params[subjectId +"_temporal-std-map.nii.gz"] = {lut: "Spectrum"};
   }
   if(instance.state.get("showEn") === 'true'){
-    var f = base + subjectId +"_ses-1_bold_task-rest_estimated-nuisance.nii.gz";
+    var f = base + subjectId +"_estimated-nuisance.nii.gz";
     params["images"].push(f);
-    params[subjectId +"_ses-1_bold_task-rest_estimated-nuisance.nii.gz"] = {lut: "Fire"};
+    params[subjectId +"_estimated-nuisance.nii.gz"] = {lut: "Fire"};
   }
   if(instance.state.get("showGp") === 'true'){
-    var f = base + subjectId +"_ses-1_bold_task-rest_grayplot-cluster.nii.gz";
+    var f = base + subjectId +"_grayplot-cluster.nii.gz";
     params["images"].push(f);
-    //TODO: create overlay for grayplot cluster
-    params[subjectId +"_ses-1_bold_task-rest_grayplot-cluster.nii.gz"] = {lut: "Green Overlay"};
+    //TODO: create color table for grayplot cluster
+    params[subjectId +"_grayplot-cluster.nii.gz"] = {lut: "Green Overlay"};
   }
 
   papaya.Container.addViewer("funcImageDisplay", params, function(err, params){
@@ -89,6 +94,7 @@ showFunctionalImage = function() {
 
 funcBoxplot = function() {
   var subjectId = FlowRouter.getParam("subjectid");
+  var sub = subjectId.split('_')[0]
 
   var metrics = ['EFC', 'FBER', 'FWHM', 'SNR', 'Ghost_y'];
   for (var i = 0; i < metrics.length; i++) {
@@ -97,8 +103,7 @@ funcBoxplot = function() {
     projection['_id'] = 0;
 
     var allSubjects = FunctionalSpatial.find({},{fields:projection}).fetch();
-    var participantMetrics = FunctionalSpatial.findOne({'Participant': subjectId }, {fields:projection});
-
+    var participantMetrics = FunctionalSpatial.findOne({'Participant': sub }, {fields:projection});
     var chartSize = ($("#boxplotSpatialContainer").width() / 5);
 
     renderBoxplot(allSubjects, participantMetrics, metrics[i], "#funcBoxplot"+metrics[i], chartSize);
