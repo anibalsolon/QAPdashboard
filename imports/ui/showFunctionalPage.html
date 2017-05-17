@@ -50,12 +50,29 @@ participant fall in the distribution of all scores for scans that were included 
   </div>
 
   <h2>QAP Functional Temporal Measures</h2>
-  <div id="boxplotContainer" class="row text-center">
-    <!-- <div class="col inline"><svg id="funcBoxplotEFC" width="90%" height="450px"></svg></div>
-    <div class="col inline"><svg id="funcBoxplotFBER" width="90%" height="450px"></svg></div>
-    <div class="col inline"><svg id="funcBoxplotFWHM" width="90%" height="450px"></svg></div>
-    <div class="col inline"><svg id="funcBoxplotSNR" width="90%" height="450px"></svg></div>
-    <div class="col inline"><svg id="funcBoxplotGhost_y" width="90%" height="450px"></svg></div> -->
+  <span>The temporal metrics computed on the functional scan are displayed as boxplots. The <div id="circle" class="inline"></div> in these plots denote where the score for the scans for this
+participant fall in the distribution of all scores for scans that were included as inputs to the functional-temporal workflow.</span>
+
+  <p>
+  <br>
+  The metrics computed are as follows:
+    <ul>
+      <li> <strong>GCOR</strong> - Global Correlation</li>
+      <li> <strong>SFS</strong> - Signal Fluctuation Sensitivity</li>
+      <li><strong>DVARS</strong> - TODO</li>
+      <li> <strong>RMSD</strong> - TODO</li>
+      <li><strong>Quality</strong> - Median Distance index</li>
+      <li><strong>Fraction of OOB Outliers</strong> - TODO</li>
+    </ul>
+    <p>All metrics are described in more detail in the <a href="http://preprocessed-connectomes-project.org/quality-assessment-protocol/#temporal-functional">QAP documentation</a>.</p>
+  </p>
+  <div id="boxplotTemporalContainer" class="row text-center">
+    <div class="col inline"><svg id="funcBoxplotGCOR" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="funcBoxplotSFS" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="funcBoxplotDVARS" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="funcBoxplotRMSD" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="funcBoxplotQuality" width="90%" height="450px"></svg></div>
+    <div class="col inline"><svg id="funcBoxplotFOO" width="90%" height="450px"></svg></div>
   </div>
 
 </div>

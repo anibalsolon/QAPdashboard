@@ -59,8 +59,8 @@ new Tabular.Table({
         return '<a href="/showFunctional/'+subid+'">'+subid+'</a>';
       }
     },
-    {data: "Session", title: "Session"},
-    {data: "Series", title: "Series"},
+    {data: "Session", title: "Session", visible:false},
+    {data: "Series", title: "Series", visible:false},
     {data: "tr", title: "TR"},
     {data: "Fraction of Outliers (Mean)", title: "Fraction of Outliers"},
     {data: "GCOR", title: "GCOR"},
