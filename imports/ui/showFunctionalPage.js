@@ -11,6 +11,11 @@ Template.showFunctionalPage.helpers({
     var subjectId = FlowRouter.getParam("subjectid");
     return subjectId;
   },
+  grayplotImg(){
+    var subjectId = FlowRouter.getParam("subjectid");
+    var base = "/"+ subjectId +"/"+ "ses-1/";
+    return base + subjectId +"_ses-1_bold_task-rest_timeseries-measures.png";
+  }
 });
 
 Template.showFunctionalPage.events({

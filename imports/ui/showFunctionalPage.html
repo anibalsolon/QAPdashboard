@@ -3,6 +3,8 @@
 
 <h1></h1>
 <h2>Mean Fucntional Image and Derivatives - {{ subjectId }}  </h2>
+<p>This is the functional preprocessed image and the derivatives created by the workflow. 
+    Thet can be used to eyeball the quality of the functional scan and check the derivatives.</p>
   <div class="row">
     <div class="text-left">
       <input type="checkbox" name="sfsCb" value="showSfs" checked> Signal Fluctuat
@@ -14,7 +16,31 @@
     <div id="funcImageDisplay" class="text-left"></div>
   </div>
 
+  <h2>Gray Plot</h2>
+  <p>The Gray Plot is a simple way to assess functional scan quality.
+    It displays the voxels time series. Unwanted signals can be spotted by vertical lines in the plot. Most of the time, Mean FD, DVARS and Global Signal fluctuations are related with the vertical lines in the grayplot.  
+    The voxels were rearranged in 10 clusters. You can check the clusters location turning on the Gray Plot option above.</p>
+    <p>Adapted from <a href="http://www.sciencedirect.com/science/article/pii/S1053811916303871">JD Power - ‎2016</a>.</p>
+  <div>
+    <img src="{{grayplotImg}}" height="auto" width="100%">
+  </div>
+
   <h2>QAP Functional Spatial Measures</h2>
+  <span>The spatial metrics computed on the functional scan are displayed as boxplots. The <div id="circle" class="inline"></div> in these plots denote where the score for the scans for this
+participant fall in the distribution of all scores for scans that were included as inputs to the functional-spatial workflow.</span>
+
+  <p>
+  <br>
+  The metrics computed are as follows:
+    <ul>
+      <li> <strong>EFC</strong> - Entropy Focus Criterion</li>
+      <li> <strong>FBER</strong> - Foreground to Background Energy Ratio</li>
+      <li><strong>FWHM</strong> - Full-width half maximum smoothness of the voxels averaged across the three coordinate axes, and also for each axis [x,y,x]</li>
+      <li> <strong>Ghost</strong> - Ghost to Signal Ratio</li>
+      <li><strong>SNR</strong> - Signal to Noise Ratio</li>
+    </ul>
+    <p>All metrics are described in more detail in the <a href="http://preprocessed-connectomes-project.org/quality-assessment-protocol/#spatial-functional">QAP documentation</a>.</p>
+  </p>
   <div id="boxplotSpatialContainer" class="row text-center">
     <div class="col inline"><svg id="funcBoxplotEFC" width="90%" height="450px"></svg></div>
     <div class="col inline"><svg id="funcBoxplotFBER" width="90%" height="450px"></svg></div>
