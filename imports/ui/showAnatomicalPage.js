@@ -28,6 +28,7 @@ Template.showAnatomicalPage.onCreated(function anatomicalOnCreated() {
   instance.state.set("showCsf", 'true');
   instance.state.set("showGm", 'true');
   instance.state.set("showWm", 'true');
+  instance.state.set("showAb", 'true');
 });
 
 Template.showAnatomicalPage.rendered = function() {
@@ -59,19 +60,21 @@ showAnatomicalImage = function() {
     var csfFile = base + subjectId +"_ses-1_T1w_anatomical-csf-mask.nii.gz";
     params["images"].push(csfFile);
     params[subjectId +"_ses-1_T1w_anatomical-csf-mask.nii.gz"] = {lut: "Gold"};
-    console.log(csfFile);
   }
   if(instance.state.get("showGm") === 'true'){
     var gmFile = base + subjectId +"_ses-1_T1w_anatomical-gm-mask.nii.gz";
     params["images"].push(gmFile);
     params[subjectId +"_ses-1_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
-    console.log(gmFile);
   }
   if(instance.state.get("showWm") === 'true'){
     var wmFile = base + subjectId +"_ses-1_T1w_anatomical-wm-mask.nii.gz";
     params["images"].push(wmFile);
     params[subjectId +"_ses-1_T1w_anatomical-wm-mask.nii.gz"] = {lut: "Grayscale"};
-    console.log(wmFile);
+  }
+  if(instance.state.get("showAb") === 'true'){
+    var abFile = base + subjectId +"_ses-1_T1w_fav-artifacts-background.nii.gz";
+    params["images"].push(abFile);
+    params[subjectId +"_ses-1_T1w_fav-artifacts-background.nii.gz"] = {lut: "Grayscale"};
   }
 
   papaya.Container.addViewer("imageDisplay", params, function(err, params){

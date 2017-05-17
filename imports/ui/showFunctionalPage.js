@@ -27,6 +27,9 @@ Template.showFunctionalPage.onCreated(function anatomicalOnCreated() {
   this.state = new ReactiveDict();
   const instance = Template.instance();
   instance.state.set("showSfs", 'true');
+  instance.state.set("showTstd", 'true');
+  instance.state.set("showEn", 'true');
+  //instance.state.set("showGp", 'true');
 });
 
 Template.showFunctionalPage.rendered = function() {
@@ -52,10 +55,25 @@ showFunctionalImage = function() {
 
   const instance = Template.instance();
   if(instance.state.get("showSfs") === 'true'){
-    var sfSFile = base + subjectId +"_ses-1_bold_task-rest_SFS.nii.gz";
-    params["images"].push(sfSFile);
+    var f = base + subjectId +"_ses-1_bold_task-rest_SFS.nii.gz";
+    params["images"].push(f);
     params[subjectId +"_ses-1_bold_task-rest_SFS.nii.gz"] = {lut: "Gold"};
-    console.log(sfSFile);
+  }
+  if(instance.state.get("showTstd") === 'true'){
+    var f = base + subjectId +"_ses-1_bold_task-rest_temporal-std-map.nii.gz";
+    params["images"].push(f);
+    params[subjectId +"_ses-1_bold_task-rest_temporal-std-map.nii.gz"] = {lut: "Spectrum"};
+  }
+  if(instance.state.get("showEn") === 'true'){
+    var f = base + subjectId +"_ses-1_bold_task-rest_estimated-nuisance.nii.gz";
+    params["images"].push(f);
+    params[subjectId +"_ses-1_bold_task-rest_estimated-nuisance.nii.gz"] = {lut: "Fire"};
+  }
+  if(instance.state.get("showGp") === 'true'){
+    var f = base + subjectId +"_ses-1_bold_task-rest_grayplot-cluster.nii.gz";
+    params["images"].push(f);
+    //TODO: create overlay for grayplot cluster
+    params[subjectId +"_ses-1_bold_task-rest_grayplot-cluster.nii.gz"] = {lut: "Green Overlay"};
   }
 
   papaya.Container.addViewer("funcImageDisplay", params, function(err, params){
