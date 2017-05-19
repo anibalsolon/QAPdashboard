@@ -6,6 +6,7 @@ import './functional.js';
 import './showAnatomicalPage.js';
 import './showFunctionalPage.js';
 import './body.html';
+import { Session } from 'meteor/session'
 
 Template.App_body.helpers({
   isIndividualPage(){
@@ -25,10 +26,26 @@ Template.App_body.helpers({
 
   isAnatomicalPage(){
   	var current = FlowRouter.getRouteName();
-  	if (current == 'anatomical') {return "activePage"};
+  	if (current == 'anatomical') {return "activePage";}
   },
   isFunctionalPage(){
   	var current = FlowRouter.getRouteName();
-  	if (current == 'functional') {return "activePage"};
+  	if (current == 'functional') {return "activePage";}
   },
+  nextSubjectName(){
+    return Session.get("anatomicalIndex");
+    return 'tchau';
+  },
+  previousSubjectName(){
+    return 'oi';
+  },
+});
+
+Template.App_body.onCreated(function App_bodyOnCreated() {
+  Session.set("anatomicalIndex", 0);
+  Session.set("functionalIndex", 0);
+
+  var allAnatomical = Anatomical.find({},{fields:'Participant':1}).fetch();
+  //var allFunctional = Functional.find({},{fields:'Participant':1}).fetch();
+
 });

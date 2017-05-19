@@ -19,10 +19,10 @@ new Tabular.Table({
       title: "Subject",
       render: function (val, type, doc) {
         var subid = doc.Participant +"_"+ doc.Session;
-        return '<a href="'+subid+'">'+subid+'</a>';
+        return '<a href="/showAnatomical/'+subid+'">'+subid+'</a>';
       }
     },
-    {data: "Session", title: "Session"},
+    {data: "Session", title: "Session", visible: false},
     {data: "CNR", title: "CNR"},
     {data: "EFC", title: "EFC"},
     {data: "FBER", title: "FBER"},

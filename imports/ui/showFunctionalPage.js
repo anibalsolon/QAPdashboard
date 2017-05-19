@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { FunctionalSpatial } from '../api/functional.js';
+import { FunctionalTemporal } from '../api/functional.js';
 import './showFunctionalPage.html';
 import './charts/boxplot.css';    
 import './charts/boxplot.js';
@@ -44,7 +45,8 @@ Template.showFunctionalPage.rendered = function() {
   if(!this._rendered) {
     this._rendered = true;
   }
-  funcBoxplot();
+  funcBoxplotSpatial();
+  funcBoxplotTemporal();
   showFunctionalImage();
 
   this.autorun(function(){
@@ -92,7 +94,7 @@ showFunctionalImage = function() {
   papaya.Container.allowPropagation = true;
 }
 
-funcBoxplot = function() {
+funcBoxplotSpatial = function() {
   var subjectId = FlowRouter.getParam("subjectid");
   var sub = subjectId.split('_')[0]
 
@@ -107,5 +109,30 @@ funcBoxplot = function() {
     var chartSize = ($("#boxplotSpatialContainer").width() / 5);
 
     renderBoxplot(allSubjects, participantMetrics, metrics[i], "#funcBoxplot"+metrics[i], chartSize);
+  };
+}
+
+funcBoxplotTemporal = function() {
+  var subjectId = FlowRouter.getParam("subjectid");
+  var sub = subjectId.split('_')[0]
+
+  var metricsName = ['GCOR', 'SFS', 'DVARS', 'RMSD', 'Quality', 'FOO'];
+  var metrics = ['GCOR','Signal Fluctuation Sensitivity (Mean)','Std DVARS (Mean)', 'RMSD (Mean)', 'Quality (Mean)','Fraction of OOB Outliers (Mean)']
+  for (var i = 0; i < metrics.length; i++) {
+    var projection = {};
+    projection[metrics[i]] = 1;
+    projection['_id'] = 0;
+
+    var allSubjects = FunctionalTemporal.find({},{fields:projection}).fetch();
+    var participantMetrics = FunctionalTemporal.findOne({'Participant': sub }, {fields:projection});
+    var chartSize = ($("#boxplotTemporalContainer").width() / 4);
+    var niceName = metricsName[i] == 'FOO' ? 'Fraction of Outliers': metricsName[i];
+
+    if (metricsName[i] == 'SFS'){
+      console.log(allSubjects);
+      console.log(participantMetrics);
+    }
+
+    renderBoxplot(allSubjects, participantMetrics, metrics[i], "#funcBoxplot"+metricsName[i], chartSize);
   };
 }

@@ -46,35 +46,36 @@ Template.showAnatomicalPage.rendered = function() {
 
 showAnatomicalImage = function() {
   var subjectId = FlowRouter.getParam("subjectid");
+  var sub = subjectId.split('_')[0]
+  var sess = subjectId.split('_')[1]
+  var base = "/"+ sub +"/"+sess + "/";
 
   var params = {};
   //add all images in the public directory
-  //all subjects go to session 1 for now
-  var base = "/"+ subjectId +"/"+ "ses-1/";
-  var anatFile = base + subjectId +"_ses-1_T1w_anatomical-reorient.nii.gz";
+  var anatFile = base + subjectId +"_T1w_anatomical-reorient.nii.gz";
   console.log(anatFile);
   params["images"] = [anatFile];
 
   const instance = Template.instance();
   if(instance.state.get("showCsf") === 'true'){
-    var csfFile = base + subjectId +"_ses-1_T1w_anatomical-csf-mask.nii.gz";
+    var csfFile = base + subjectId +"_T1w_anatomical-csf-mask.nii.gz";
     params["images"].push(csfFile);
-    params[subjectId +"_ses-1_T1w_anatomical-csf-mask.nii.gz"] = {lut: "Gold"};
+    params[subjectId +"_T1w_anatomical-csf-mask.nii.gz"] = {lut: "Gold"};
   }
   if(instance.state.get("showGm") === 'true'){
-    var gmFile = base + subjectId +"_ses-1_T1w_anatomical-gm-mask.nii.gz";
+    var gmFile = base + subjectId +"_T1w_anatomical-gm-mask.nii.gz";
     params["images"].push(gmFile);
-    params[subjectId +"_ses-1_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
+    params[subjectId +"_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
   }
   if(instance.state.get("showWm") === 'true'){
-    var wmFile = base + subjectId +"_ses-1_T1w_anatomical-wm-mask.nii.gz";
+    var wmFile = base + subjectId +"_T1w_anatomical-wm-mask.nii.gz";
     params["images"].push(wmFile);
-    params[subjectId +"_ses-1_T1w_anatomical-wm-mask.nii.gz"] = {lut: "Grayscale"};
+    params[subjectId +"_T1w_anatomical-wm-mask.nii.gz"] = {lut: "Grayscale"};
   }
   if(instance.state.get("showAb") === 'true'){
-    var abFile = base + subjectId +"_ses-1_T1w_fav-artifacts-background.nii.gz";
+    var abFile = base + subjectId +"_T1w_fav-artifacts-background.nii.gz";
     params["images"].push(abFile);
-    params[subjectId +"_ses-1_T1w_fav-artifacts-background.nii.gz"] = {lut: "Grayscale"};
+    params[subjectId +"_T1w_fav-artifacts-background.nii.gz"] = {lut: "Grayscale"};
   }
 
   papaya.Container.addViewer("imageDisplay", params, function(err, params){
@@ -85,15 +86,16 @@ showAnatomicalImage = function() {
 
 anatBoxplot = function() {
   var subjectId = FlowRouter.getParam("subjectid");
+  var sub = subjectId.split('_')[0]
 
   var metrics = ['CNR', 'EFC', 'FBER', 'FWHM', 'SNR'];
   for (var i = 0; i < metrics.length; i++) {
     var projection = {};
     projection[metrics[i]] = 1;
-    projection['_id'] = 0;
+    //projection['_id'] = 0;
 
     var allSubjects = Anatomical.find({},{fields:projection}).fetch();
-    var participantMetrics = Anatomical.findOne({'Participant': subjectId }, {fields:projection});
+    var participantMetrics = Anatomical.findOne({'Participant': sub }, {fields:projection});
 
     var chartSize = ($("#boxplotContainer").width() / 5);
 
