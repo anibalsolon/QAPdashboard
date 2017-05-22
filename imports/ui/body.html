@@ -14,9 +14,9 @@
 	    	<li><a class="  {{ isFunctionalPage }}  " href="/functional">Functional Dashboard</a></li>
 
         {{#if isIndividualPage  }}
-          <li> <a href="#" title="previous: {{  previousSubjectName }}"><i class="fa fa-arrow-left" aria-hidden="true"></i></a> </li>
+          <li> <a id="previousArrow" href="/show{{ pageType }}/{{  previousSubjectName }}" title="previous: {{  previousSubjectName }}"><i class="  {{  showArrowPrevious  }} fa fa-arrow-left" aria-hidden="true"></i></a> </li>
         <li><a href="#" class="nav-link activePage">  {{  pageName  }}  </a></li>
-        <li> <a href="#" title="next: {{  nextSubjectName }}"><i class="fa fa-arrow-right" aria-hidden="true"></i></a> </li>
+        <li> <a id="nextArrow" href="/show{{  pageType  }}/{{  nextSubjectName }}" title="next: {{  nextSubjectName }}"><i class=" {{  showArrowNext  }} fa fa-arrow-right" aria-hidden="true"></i></a> </li>
         {{/if}}
 	    </ul>
     </div>    

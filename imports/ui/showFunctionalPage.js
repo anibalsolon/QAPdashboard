@@ -136,3 +136,16 @@ funcBoxplotTemporal = function() {
     renderBoxplot(allSubjects, participantMetrics, metrics[i], "#funcBoxplot"+metricsName[i], chartSize);
   };
 }
+
+Tracker.autorun(function() {
+  FlowRouter.watchPathChange();
+  var currentContext = FlowRouter.current();
+  console.log(currentContext);
+  if ("path" in currentContext && currentContext.path.startsWith('/showFunctional')){ 
+    initDictionary();
+    funcBoxplotTemporal();
+    funcBoxplotSpatial();
+    showFunctionalImage();
+    console.log(currentContext.oldRoute.name);
+  }
+});

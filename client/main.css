@@ -62,3 +62,10 @@ h1{
     border-radius: 50%;
     border: 1px solid #000;
 }
+
+.hideArrow{
+    visibility: hidden;
+}
+.showArrow{
+    visibility: visible;
+}

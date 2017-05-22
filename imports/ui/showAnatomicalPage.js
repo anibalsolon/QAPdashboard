@@ -16,28 +16,28 @@ Template.showAnatomicalPage.events({
   "click input": function(event, template){
     var overlayVal = ""+ $(event.currentTarget).is(':checked');
     var  overlayName = ""+ $(event.currentTarget).val();
-    const instance = Template.instance();
-    instance.state.set(overlayName, overlayVal);
+    Session.set(overlayName, overlayVal);
     showAnatomicalImage();
   },
 });
 
+initDictionary = function(){
+  Session.set("showCsf", 'true');
+  Session.set("showGm", 'true');
+  Session.set("showWm", 'true');
+  Session.set("showAb", 'true');
+}
+
 Template.showAnatomicalPage.onCreated(function anatomicalOnCreated() {
-  this.state = new ReactiveDict();
-  const instance = Template.instance();
-  instance.state.set("showCsf", 'true');
-  instance.state.set("showGm", 'true');
-  instance.state.set("showWm", 'true');
-  instance.state.set("showAb", 'true');
+  initDictionary();
 });
 
 Template.showAnatomicalPage.rendered = function() {
   if(!this._rendered) {
     this._rendered = true;
+    console.log('rendered1');
   }
-
-  anatBoxplot();
-  showAnatomicalImage();
+  console.log('rendered');
 
   this.autorun(function(){
     console.log('autorun');
@@ -53,26 +53,24 @@ showAnatomicalImage = function() {
   var params = {};
   //add all images in the public directory
   var anatFile = base + subjectId +"_T1w_anatomical-reorient.nii.gz";
-  console.log(anatFile);
   params["images"] = [anatFile];
 
-  const instance = Template.instance();
-  if(instance.state.get("showCsf") === 'true'){
+  if(Session.get("showCsf") === 'true'){
     var csfFile = base + subjectId +"_T1w_anatomical-csf-mask.nii.gz";
     params["images"].push(csfFile);
     params[subjectId +"_T1w_anatomical-csf-mask.nii.gz"] = {lut: "Gold"};
   }
-  if(instance.state.get("showGm") === 'true'){
+  if(Session.get("showGm") === 'true'){
     var gmFile = base + subjectId +"_T1w_anatomical-gm-mask.nii.gz";
     params["images"].push(gmFile);
     params[subjectId +"_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
   }
-  if(instance.state.get("showWm") === 'true'){
+  if(Session.get("showWm") === 'true'){
     var wmFile = base + subjectId +"_T1w_anatomical-wm-mask.nii.gz";
     params["images"].push(wmFile);
     params[subjectId +"_T1w_anatomical-wm-mask.nii.gz"] = {lut: "Grayscale"};
   }
-  if(instance.state.get("showAb") === 'true'){
+  if(Session.get("showAb") === 'true'){
     var abFile = base + subjectId +"_T1w_fav-artifacts-background.nii.gz";
     params["images"].push(abFile);
     params[subjectId +"_T1w_fav-artifacts-background.nii.gz"] = {lut: "Grayscale"};
@@ -83,6 +81,7 @@ showAnatomicalImage = function() {
                                         });
   papaya.Container.allowPropagation = true;
 }
+
 
 anatBoxplot = function() {
   var subjectId = FlowRouter.getParam("subjectid");
@@ -103,3 +102,14 @@ anatBoxplot = function() {
   };
 
 }
+Tracker.autorun(function() {
+  FlowRouter.watchPathChange();
+  var currentContext = FlowRouter.current();
+  console.log(currentContext);
+  if ("path" in currentContext && currentContext.path.startsWith('/showAnatomical')){ 
+    initDictionary();
+    anatBoxplot();
+    showAnatomicalImage();
+    console.log(currentContext.oldRoute.name);
+  }
+});
