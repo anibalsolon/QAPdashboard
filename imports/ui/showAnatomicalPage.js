@@ -86,7 +86,7 @@ showAnatomicalImage = function() {
 anatBoxplot = function() {
   var subjectId = FlowRouter.getParam("subjectid");
   var sub = subjectId.split('_')[0]
-
+  console.log('aaaaaaaaaaaaaaaaaa');
   var metrics = ['CNR', 'EFC', 'FBER', 'FWHM', 'SNR'];
   for (var i = 0; i < metrics.length; i++) {
     var projection = {};
@@ -105,7 +105,6 @@ anatBoxplot = function() {
 Tracker.autorun(function() {
   FlowRouter.watchPathChange();
   var currentContext = FlowRouter.current();
-  console.log(currentContext);
   if ("path" in currentContext && currentContext.path.startsWith('/showAnatomical')){ 
     initDictionary();
     anatBoxplot();

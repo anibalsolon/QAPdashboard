@@ -265,6 +265,7 @@ d3.csv("/data.csv", function(error, csv) {
   var min = Math.min.apply(null, clean);
   var max = Math.max.apply(null, clean);
 
+  $(domid).empty();
   var chart = d3.box()
     .whiskers(iqr(1.5))
     .height(height) 
