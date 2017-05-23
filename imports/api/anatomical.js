@@ -28,16 +28,16 @@ new Tabular.Table({
     {data: "FBER", title: "FBER"},
     {data: "FWHM", title: "FWHM"},
     {data: "SNR", title: "SNR"},
-    {
-    	data: "Time", 
-    	title: "Time",
-    	render: function (val, type, doc) {
-        if (val instanceof Date) {
-          return moment(val).calendar();
-        } else {
-          return val;
-        }
-      }
-	},
+ //    {
+ //    	data: "Time", 
+ //    	title: "Time",
+ //    	render: function (val, type, doc) {
+ //        if (val instanceof Date) {
+ //          return moment(val).calendar();
+ //        } else {
+ //          return val;
+ //        }
+ //      }
+	// },
   ]
 });

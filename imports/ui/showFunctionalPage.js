@@ -26,19 +26,17 @@ Template.showFunctionalPage.events({
   "click input": function(event, template){
     var overlayVal = ""+ $(event.currentTarget).is(':checked');
     var  overlayName = ""+ $(event.currentTarget).val();
-    const instance = Template.instance();
-    instance.state.set(overlayName, overlayVal);
+    console.log(overlayName+': '+overlayVal);
+    Session.set(overlayName, overlayVal);
     showFunctionalImage();
   },
 });
 
 Template.showFunctionalPage.onCreated(function anatomicalOnCreated() {
-  this.state = new ReactiveDict();
-  const instance = Template.instance();
-  instance.state.set("showSfs", 'true');
-  instance.state.set("showTstd", 'true');
-  instance.state.set("showEn", 'true');
-  //instance.state.set("showGp", 'true');
+  Session.set("showSfs", 'true');
+  Session.set("showTstd", 'true');
+  Session.set("showEn", 'true');
+  Session.set("lastPath", '');
 });
 
 Template.showFunctionalPage.rendered = function() {
@@ -65,23 +63,23 @@ showFunctionalImage = function() {
   var meanFile = base + subjectId +"_mean-functional.nii.gz";
   params["images"] = [meanFile];
 
-  const instance = Template.instance();
-  if(instance.state.get("showSfs") === 'true'){
+  if(Session.get("showSfs") === 'true'){
     var f = base + subjectId +"_SFS.nii.gz";
     params["images"].push(f);
+    console.log('show sfs'+' '+Session.get("showSfs"));
     params[subjectId +"_SFS.nii.gz"] = {lut: "Gold"};
   }
-  if(instance.state.get("showTstd") === 'true'){
+  if(Session.get("showTstd") === 'true'){
     var f = base + subjectId +"_temporal-std-map.nii.gz";
     params["images"].push(f);
     params[subjectId +"_temporal-std-map.nii.gz"] = {lut: "Spectrum"};
   }
-  if(instance.state.get("showEn") === 'true'){
+  if(Session.get("showEn") === 'true'){
     var f = base + subjectId +"_estimated-nuisance.nii.gz";
     params["images"].push(f);
     params[subjectId +"_estimated-nuisance.nii.gz"] = {lut: "Fire"};
   }
-  if(instance.state.get("showGp") === 'true'){
+  if(Session.get("showGp") === 'true'){
     var f = base + subjectId +"_grayplot-cluster.nii.gz";
     params["images"].push(f);
     //TODO: create color table for grayplot cluster
@@ -91,7 +89,7 @@ showFunctionalImage = function() {
   papaya.Container.addViewer("funcImageDisplay", params, function(err, params){
                                         console.log('papaya callback', err, params)
                                         });
-  papaya.Container.allowPropagation = true;
+  //papaya.Container.allowPropagation = true;
 }
 
 funcBoxplotSpatial = function() {
@@ -102,7 +100,7 @@ funcBoxplotSpatial = function() {
   for (var i = 0; i < metrics.length; i++) {
     var projection = {};
     projection[metrics[i]] = 1;
-    projection['_id'] = 0;
+    //projection['_id'] = 0;
 
     var allSubjects = FunctionalSpatial.find({},{fields:projection}).fetch();
     var participantMetrics = FunctionalSpatial.findOne({'Participant': sub }, {fields:projection});
@@ -121,17 +119,12 @@ funcBoxplotTemporal = function() {
   for (var i = 0; i < metrics.length; i++) {
     var projection = {};
     projection[metrics[i]] = 1;
-    projection['_id'] = 0;
+    //projection['_id'] = 0;
 
     var allSubjects = FunctionalTemporal.find({},{fields:projection}).fetch();
     var participantMetrics = FunctionalTemporal.findOne({'Participant': sub }, {fields:projection});
     var chartSize = ($("#boxplotTemporalContainer").width() / 4);
     var niceName = metricsName[i] == 'FOO' ? 'Fraction of Outliers': metricsName[i];
-
-    if (metricsName[i] == 'SFS'){
-      console.log(allSubjects);
-      console.log(participantMetrics);
-    }
 
     renderBoxplot(allSubjects, participantMetrics, metrics[i], "#funcBoxplot"+metricsName[i], chartSize);
   };
@@ -142,10 +135,17 @@ Tracker.autorun(function() {
   var currentContext = FlowRouter.current();
   console.log(currentContext);
   if ("path" in currentContext && currentContext.path.startsWith('/showFunctional')){ 
-    initDictionary();
+    //navigated to new subject, reset overlays
+    // if (Session.get('lastPath') != currentContext.path){
+    //   Session.set("showSfs", 'true');
+    //   Session.set("showTstd", 'true');
+    //   Session.set("showEn", 'true');
+    //   Session.set("showGp", 'false');
+    // }
+    
+    showFunctionalImage();
     funcBoxplotTemporal();
     funcBoxplotSpatial();
-    showFunctionalImage();
-    console.log(currentContext.oldRoute.name);
+    Session.set('lastPath', currentContext.path);
   }
 });

@@ -22,23 +22,23 @@ new Tabular.Table({
     },
     {data: "Session", title: "Session", visible:false},
     {data: "Series", title: "Series", visible:false},
-    {data: "tr", title: "TR"},
+    //{data: "tr", title: "TR"},
     {data: "EFC", title: "EFC"},
     {data: "FBER", title: "FBER"},
     {data: "FWHM", title: "FWHM"},
     {data: "SNR", title: "SNR"},
     {data: "Ghost_y", title: "Ghost"},
-    {
-    	data: "Time", 
-    	title: "Time",
-    	render: function (val, type, doc) {
-        if (val instanceof Date) {
-          return moment(val).calendar();
-        } else {
-          return val;
-        }
-      }
-	},
+ //    {
+ //    	data: "Time", 
+ //    	title: "Time",
+ //    	render: function (val, type, doc) {
+ //        if (val instanceof Date) {
+ //          return moment(val).calendar();
+ //        } else {
+ //          return val;
+ //        }
+ //      }
+	// },
   ]
 });
 
