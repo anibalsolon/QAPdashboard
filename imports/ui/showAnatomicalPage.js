@@ -35,12 +35,9 @@ Template.showAnatomicalPage.onCreated(function anatomicalOnCreated() {
 Template.showAnatomicalPage.rendered = function() {
   if(!this._rendered) {
     this._rendered = true;
-    console.log('rendered1');
   }
-  console.log('rendered');
 
   this.autorun(function(){
-    console.log('autorun');
   });
 }
 

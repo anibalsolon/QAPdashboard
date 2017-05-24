@@ -36,10 +36,19 @@ Template.anatomical.onCreated(function anatomicalOnCreated() {
   this.state = new ReactiveDict();
 });
 
+Template.anatomical.rendered = function() {
+  if(!this._rendered) {
+    this._rendered = true;
+  }
+  this.autorun(function(){
+    histogram("CNR");
+  });
+}
+
 histogram = function(metric) {
   var projection = {};
   projection[metric] = 1;
-  projection['_id'] = 0;
+  //projection['_id'] = 0;
   var data = Anatomical.find({},{fields:projection}).fetch();
   d = _.chain(data)
     .pluck(metric)
@@ -48,5 +57,7 @@ histogram = function(metric) {
 
   var min_val = Math.min.apply(Math, d);
   var max_val = Math.max.apply(Math, d);
-  renderHistogram(d, min_val, max_val, "#anatomicalHistogram");
+  var chartSize = $("#anatomicalHistogramContainer").width();
+  console.log(chartSize);
+  renderHistogram(d, min_val, max_val, "#anatomicalHistogram", chartSize);
 }

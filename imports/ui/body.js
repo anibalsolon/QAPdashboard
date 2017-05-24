@@ -138,9 +138,7 @@ Template.functional.rendered = function() {
   if(!this._rendered) {
     this._rendered = true;
   }
-  console.log('rendering');
   this.autorun(function(){
-    console.log('autorun');
   });
 }
 

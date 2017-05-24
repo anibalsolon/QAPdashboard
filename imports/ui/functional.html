@@ -1,11 +1,43 @@
 <template name="functional">
-<div class="container-fluid">
+<div class="container">
   <h1></h1>
   <h2>Functional Spatial Masures</h2>
   {{> tabular table=TabularTables.FunctionalSpatialTable class="table table-striped table-bordered table-condensed"}}
+    <div class="row">
+      <div class="col-md-4">
+        <select id="metric-select-functional-spatial" class="form-control">
+          <option disabled="disabled">Please Select</option>
+          <option value="EFC" selected="selected">EFC</option>
+          <option value="FBER">FBER</option>
+          <option value="FWHM">FWHM</option>
+          <option value="SNR">SNR</option>
+          <option value="Ghost_y">Ghost</option>
+        </select>
+      </div>
+    </div>
+    <div id="functionalSpatialHistogramContainer" class="d3board">
+      <svg id="functionalSpatialHistogram" width="100%" height="450"></svg>
+    </div>
 
   <h2>Functional Temporal Masures</h2>
   {{> tabular table=TabularTables.FunctionalTemporalTable class="table table-striped table-bordered table-condensed"}}
+  
+  <div class="row">
+  <div class="col-md-4">
+    <select id="metric-select-functional-temporal" class="form-control">
+      <option disabled="disabled">Please Select</option>
+      <option value="Fraction of Outliers (Mean)" selected="selected">Fraction of Outliers</option>
+      <option value="GCOR">GCOR</option>
+      <option value="Quality (Mean)">Quality</option>
+      <option value="RMSD (Mean)">RMSD</option>
+      <option value="Signal Fluctuation Sensitivity (Mean)">SFS</option>
+      <option value="Std DVARS (Mean)">DVARS</option>
+    </select>
+    </div>
+  </div>
+  <div id="functionalTemporalHistogramContainer" class="d3board">
+    <svg id="functionalTemporalHistogram" width="100%" height="450"></svg>
+  </div>
 
 </div>
 </template>

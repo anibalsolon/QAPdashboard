@@ -61,23 +61,23 @@ new Tabular.Table({
     },
     {data: "Session", title: "Session", visible:false},
     {data: "Series", title: "Series", visible:false},
-    {data: "tr", title: "TR"},
+    //{data: "tr", title: "TR"},
     {data: "Fraction of Outliers (Mean)", title: "Fraction of Outliers"},
     {data: "GCOR", title: "GCOR"},
     {data: "Quality (Mean)", title: "Quality"},
     {data: "RMSD (Mean)", title: "RMSD"},
     {data: "Signal Fluctuation Sensitivity (Mean)", title: "SFS"},
     {data: "Std DVARS (Mean)", title: "DVARS"},
-    {
-      data: "Time", 
-      title: "Time",
-      render: function (val, type, doc) {
-        if (val instanceof Date) {
-          return moment(val).calendar();
-        } else {
-          return val;
-        }
-      }
-  },
+  //   {
+  //     data: "Time", 
+  //     title: "Time",
+  //     render: function (val, type, doc) {
+  //       if (val instanceof Date) {
+  //         return moment(val).calendar();
+  //       } else {
+  //         return val;
+  //       }
+  //     }
+  // },
   ]
 });
