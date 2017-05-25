@@ -2,29 +2,13 @@ import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { Anatomical } from '../api/anatomical.js';
 import { FunctionalSpatial } from '../api/functional.js';
+import { Session } from 'meteor/session';
 import './anatomical.js';
 import './functional.js';
 import './showAnatomicalPage.js';
 import './showFunctionalPage.js';
 import './body.html';
 import './utils.js';
-import { Session } from 'meteor/session';
-
-// Template.App_body.events({
-//   "click #previousArrow": function(event, template){
-//     var current = FlowRouter.getRouteName();
-//     if (current == 'anatomicalSubject.show') {
-//     showAnatomicalImage();
-//     anatBoxplot();
-//   }
-//   else{}
-//   },
-//   "click #nextArrow": function(event, template){
-//     console.log('aaaaaa');
-//     FlowRouter.reload();
-//   },
-// });
-
 
 Template.App_body.helpers({
   showArrowNext(){

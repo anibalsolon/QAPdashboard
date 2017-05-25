@@ -17,7 +17,7 @@ Template.showFunctionalPage.helpers({
     var sub = subjectId.split('_')[0]
     var sess = subjectId.split('_')[1]
     var scan = subjectId.split('_')[2]
-    var base = "/"+ sub +"/"+sess + "/";
+    var base = Session.get("base") + sub +"/"+sess + "/";
     return base + subjectId +"_timeseries-measures.png";
   }
 });
@@ -56,7 +56,7 @@ showFunctionalImage = function() {
   var sub = subjectId.split('_')[0]
   var sess = subjectId.split('_')[1]
   var scan = subjectId.split('_')[2]
-  var base = "/"+ sub +"/"+sess + "/";
+  var base = Meteor.settings.base + sub +"/"+sess + "/";
 
   var params = {};
   //add all images in the public directory

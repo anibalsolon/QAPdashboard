@@ -6,12 +6,19 @@ import './functional.html';
 import './charts/histogram.js';
 import './charts/histogram.css';
 
+Template.functional.onCreated(function functionalOnCreated() {
+  this.state = new ReactiveDict();
+  // console.log('oi');
+  // spatialHistogram('EFC');
+});
+
+Template.functional.onRendered(function functionalOnRendered() {
+  console.log('oi5');
+  spatialHistogram('EFC');
+  temporalHistogram('Fraction of Outliers (Mean)');
+});
 
 Template.functional.helpers({
-  // anatomical(){
-  //   return Anatomical.find({});
-
-  // },
   currentSpatialMetric: function(){
     const instance = Template.instance();
     return instance.state.get("current_functional_spatial_metric");
@@ -37,24 +44,6 @@ Template.functional.events({
   },
 });
 
-Template.functional.onCreated(function anatomicalOnCreated() {
-  this.state = new ReactiveDict();
-});
-
-Template.functional.rendered = function() {
-  if(!this._rendered) {
-    console.log('oi3');
-    this._rendered = true;
-  }
-  console.log('oi');
-  spatialHistogram("EFC");
-  temporalHistogram("foo");
-  this.autorun(function(){
-      console.log('oi2');
-    spatialHistogram("EFC");
-    temporalHistogram("foo");
-  });
-}
 
 spatialHistogram = function(metric) {
   var projection = {};
@@ -69,7 +58,9 @@ spatialHistogram = function(metric) {
   var min_val = Math.min.apply(Math, d);
   var max_val = Math.max.apply(Math, d);
   var chartSize = $("#functionalSpatialHistogramContainer").width();
+  console.log(chartSize);
   renderHistogram(d, min_val, max_val, "#functionalSpatialHistogram", chartSize);
+  
 }
 
 temporalHistogram = function(metric) {

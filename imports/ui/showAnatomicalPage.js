@@ -43,15 +43,16 @@ Template.showAnatomicalPage.rendered = function() {
 
 showAnatomicalImage = function() {
   var subjectId = FlowRouter.getParam("subjectid");
-  var sub = subjectId.split('_')[0]
-  var sess = subjectId.split('_')[1]
-  var base = "/"+ sub +"/"+sess + "/";
+  var sub = subjectId.split('_')[0];
+  var sess = subjectId.split('_')[1];
+  console.log(Meteor.settings);
+  var base = Meteor.settings.public.base + sub +"/"+sess + "/";
 
   var params = {};
   //add all images in the public directory
   var anatFile = base + subjectId +"_T1w_anatomical-reorient.nii.gz";
   params["images"] = [anatFile];
-
+  console.log('aaaa',anatFile);
   if(Session.get("showCsf") === 'true'){
     var csfFile = base + subjectId +"_T1w_anatomical-csf-mask.nii.gz";
     params["images"].push(csfFile);
