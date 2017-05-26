@@ -13,12 +13,13 @@ Template.showFunctionalPage.helpers({
     return subjectId;
   },
   grayplotImg(){
-    var subjectId = FlowRouter.getParam("subjectid");
-    var sub = subjectId.split('_')[0]
-    var sess = subjectId.split('_')[1]
-    var scan = subjectId.split('_')[2]
-    var base = Session.get("base") + sub +"/"+sess + "/";
+  	var subjectId = FlowRouter.getParam("subjectid");
+    var info = getSubjectInfo();
+    var base = Meteor.settings.public.base + info.subject +"/"+info.session + "/";
     return base + subjectId +"_timeseries-measures.png";
+  },
+  getPixdim(){
+    var info = getSubjectInfo();
   }
 });
 
@@ -53,10 +54,8 @@ Template.showFunctionalPage.rendered = function() {
 
 showFunctionalImage = function() {
   var subjectId = FlowRouter.getParam("subjectid");
-  var sub = subjectId.split('_')[0]
-  var sess = subjectId.split('_')[1]
-  var scan = subjectId.split('_')[2]
-  var base = Meteor.settings.base + sub +"/"+sess + "/";
+  var info = getSubjectInfo();
+  var base = Meteor.settings.public.base + info.subject +"/"+info.session + "/";
 
   var params = {};
   //add all images in the public directory
@@ -89,12 +88,21 @@ showFunctionalImage = function() {
   papaya.Container.addViewer("funcImageDisplay", params, function(err, params){
                                         console.log('papaya callback', err, params)
                                         });
-  //papaya.Container.allowPropagation = true;
+  papaya.Container.allowPropagation = true;
+}
+
+getSubjectInfo = function(){
+  var subjectId = FlowRouter.getParam("subjectid");
+  var sub = subjectId.split('_')[0];
+  var sess = subjectId.split('_')[1];
+  var scan = subjectId.split('_')[2];
+  var subinfo = {'subject':sub, 'session': sess, 'scan': scan};
+  return subinfo;
 }
 
 funcBoxplotSpatial = function() {
   var subjectId = FlowRouter.getParam("subjectid");
-  var sub = subjectId.split('_')[0]
+  var info = getSubjectInfo();
 
   var metrics = ['EFC', 'FBER', 'FWHM', 'SNR', 'Ghost_y'];
   for (var i = 0; i < metrics.length; i++) {
@@ -103,16 +111,16 @@ funcBoxplotSpatial = function() {
     //projection['_id'] = 0;
 
     var allSubjects = FunctionalSpatial.find({},{fields:projection}).fetch();
-    var participantMetrics = FunctionalSpatial.findOne({'Participant': sub }, {fields:projection});
+    var participantMetrics = FunctionalSpatial.findOne({'Participant': info.subject, 'Session': info.session }, {fields:projection});
     var chartSize = ($("#boxplotSpatialContainer").width() / 5);
-
+    console.log(participantMetrics);
     renderBoxplot(allSubjects, participantMetrics, metrics[i], "#funcBoxplot"+metrics[i], chartSize);
   };
 }
 
 funcBoxplotTemporal = function() {
   var subjectId = FlowRouter.getParam("subjectid");
-  var sub = subjectId.split('_')[0]
+  var info = getSubjectInfo();
 
   var metricsName = ['GCOR', 'SFS', 'DVARS', 'RMSD', 'Quality', 'FOO'];
   var metrics = ['GCOR','Signal Fluctuation Sensitivity (Mean)','Std DVARS (Mean)', 'RMSD (Mean)', 'Quality (Mean)','Fraction of OOB Outliers (Mean)']
@@ -122,7 +130,8 @@ funcBoxplotTemporal = function() {
     //projection['_id'] = 0;
 
     var allSubjects = FunctionalTemporal.find({},{fields:projection}).fetch();
-    var participantMetrics = FunctionalTemporal.findOne({'Participant': sub }, {fields:projection});
+    var participantMetrics = FunctionalTemporal.findOne({'Participant': info.subject, 'Session': info.session }, {fields:projection});
+    //TODO: all fields to query: , 'Series': info.scan
     var chartSize = ($("#boxplotTemporalContainer").width() / 4);
     var niceName = metricsName[i] == 'FOO' ? 'Fraction of Outliers': metricsName[i];
 
@@ -143,9 +152,9 @@ Tracker.autorun(function() {
     //   Session.set("showGp", 'false');
     // }
     
-    showFunctionalImage();
     funcBoxplotTemporal();
     funcBoxplotSpatial();
-    Session.set('lastPath', currentContext.path);
+    showFunctionalImage();
+    //Session.set('lastPath', currentContext.path);
   }
 });

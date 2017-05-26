@@ -43,10 +43,9 @@ Template.showAnatomicalPage.rendered = function() {
 
 showAnatomicalImage = function() {
   var subjectId = FlowRouter.getParam("subjectid");
-  var sub = subjectId.split('_')[0];
-  var sess = subjectId.split('_')[1];
+  var info = getSubjectInfo();
   console.log(Meteor.settings);
-  var base = Meteor.settings.public.base + sub +"/"+sess + "/";
+  var base = Meteor.settings.public.base + info.subject +"/"+info.session + "/";
 
   var params = {};
   //add all images in the public directory
@@ -80,10 +79,17 @@ showAnatomicalImage = function() {
   papaya.Container.allowPropagation = true;
 }
 
+getSubjectInfo = function(){
+  var subjectId = FlowRouter.getParam("subjectid");
+  var sub = subjectId.split('_')[0];
+  var sess = subjectId.split('_')[1];
+  var subinfo = {'subject':sub, 'session': sess};
+  return subinfo;
+}
 
 anatBoxplot = function() {
   var subjectId = FlowRouter.getParam("subjectid");
-  var sub = subjectId.split('_')[0];
+  var info = getSubjectInfo();
   var metrics = ['CNR', 'EFC', 'FBER', 'FWHM', 'SNR'];
   for (var i = 0; i < metrics.length; i++) {
     var projection = {};
@@ -91,7 +97,7 @@ anatBoxplot = function() {
     //projection['_id'] = 0;
 
     var allSubjects = Anatomical.find({},{fields:projection}).fetch();
-    var participantMetrics = Anatomical.findOne({'Participant': sub }, {fields:projection});
+    var participantMetrics = Anatomical.findOne({'Participant': info.subject, 'Session': info.session }, {fields:projection});
 
     var chartSize = ($("#boxplotContainer").width() / 5);
 
@@ -103,7 +109,7 @@ Tracker.autorun(function() {
   FlowRouter.watchPathChange();
   var currentContext = FlowRouter.current();
   if ("path" in currentContext && currentContext.path.startsWith('/showAnatomical')){ 
-    initDictionary();
+    //initDictionary();
     anatBoxplot();
     showAnatomicalImage();
   }
