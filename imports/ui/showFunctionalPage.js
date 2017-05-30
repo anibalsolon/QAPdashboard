@@ -27,9 +27,8 @@ Template.showFunctionalPage.events({
   "click input": function(event, template){
     var overlayVal = ""+ $(event.currentTarget).is(':checked');
     var  overlayName = ""+ $(event.currentTarget).val();
-    console.log(overlayName+': '+overlayVal);
     Session.set(overlayName, overlayVal);
-    showFunctionalImage();
+    reloadFunctionalImage();
   },
 });
 
@@ -47,12 +46,41 @@ Template.showFunctionalPage.rendered = function() {
   funcBoxplotSpatial();
   funcBoxplotTemporal();
   showFunctionalImage();
-
   this.autorun(function(){
   });
 }
 
+reloadFunctionalImage = function(){
+  if(Session.get("showSfs") === 'true'){
+    papaya.Container.showImage(0,1);
+  }else{
+     papaya.Container.hideImage(0, 1);
+  }
+
+  if(Session.get("showTstd") === 'true'){
+    papaya.Container.showImage(0,2);
+  }else{
+     papaya.Container.hideImage(0, 2);
+  }
+  if(Session.get("showEn") === 'true'){
+    papaya.Container.showImage(0,3);
+  }else{
+     papaya.Container.hideImage(0, 3);
+  }
+  if(Session.get("showGp") === 'true'){
+    papaya.Container.showImage(0,4);
+  }else{
+    papaya.Container.hideImage(0,4);
+  }
+}
+
 showFunctionalImage = function() {
+  //remove old papaya containers, 
+  //assume we always have at most 1 container
+  if(papayaContainers.length > 0){
+    papayaContainers.pop();
+  }
+
   var subjectId = FlowRouter.getParam("subjectid");
   var info = getSubjectInfo();
   var base = Meteor.settings.public.base + info.subject +"/"+info.session + "/";
@@ -62,33 +90,34 @@ showFunctionalImage = function() {
   var meanFile = base + subjectId +"_mean-functional.nii.gz";
   params["images"] = [meanFile];
 
-  if(Session.get("showSfs") === 'true'){
-    var f = base + subjectId +"_SFS.nii.gz";
-    params["images"].push(f);
-    console.log('show sfs'+' '+Session.get("showSfs"));
-    params[subjectId +"_SFS.nii.gz"] = {lut: "Gold"};
-  }
-  if(Session.get("showTstd") === 'true'){
-    var f = base + subjectId +"_temporal-std-map.nii.gz";
-    params["images"].push(f);
-    params[subjectId +"_temporal-std-map.nii.gz"] = {lut: "Spectrum"};
-  }
-  if(Session.get("showEn") === 'true'){
-    var f = base + subjectId +"_estimated-nuisance.nii.gz";
-    params["images"].push(f);
-    params[subjectId +"_estimated-nuisance.nii.gz"] = {lut: "Fire"};
-  }
-  if(Session.get("showGp") === 'true'){
-    var f = base + subjectId +"_grayplot-cluster.nii.gz";
-    params["images"].push(f);
-    //TODO: create color table for grayplot cluster
-    params[subjectId +"_grayplot-cluster.nii.gz"] = {lut: "Green Overlay"};
-  }
+  var f = base + subjectId +"_SFS.nii.gz";
+  params["images"].push(f);
+  params[subjectId +"_SFS.nii.gz"] = {"lut": "Hot-and-Cold", "min": 0, "max":900};
+
+  var f = base + subjectId +"_temporal-std-map.nii.gz";
+  params["images"].push(f);
+  params[subjectId +"_temporal-std-map.nii.gz"] = {"lut": "Spectrum", "min": 0, "max":900};
+
+  var f = base + subjectId +"_estimated-nuisance.nii.gz";
+  params["images"].push(f);
+  params[subjectId +"_estimated-nuisance.nii.gz"] = {"lut": "Fire", "min": 0, "max":900};
+
+  var f = base + subjectId +"_grayplot-cluster.nii.gz";
+  params["images"].push(f);
+  //TODO: create color table for grayplot cluster
+  params[subjectId +"_grayplot-cluster.nii.gz"] = {"lut": "Green Overlay", "min": 0, "max":900, "hide":true};
 
   papaya.Container.addViewer("funcImageDisplay", params, function(err, params){
-                                        console.log('papaya callback', err, params)
+                                        console.log('papaya callback', err, params);
                                         });
-  papaya.Container.allowPropagation = true;
+
+  params["loadingComplete"] = function() {
+    setTimeout(function() {
+    console.log('funciona');
+    $($("span[id^=File]")[0]).hide();
+    }, 5000);
+};
+  //papaya.Container.allowPropagation = true;
 }
 
 getSubjectInfo = function(){
@@ -113,7 +142,6 @@ funcBoxplotSpatial = function() {
     var allSubjects = FunctionalSpatial.find({},{fields:projection}).fetch();
     var participantMetrics = FunctionalSpatial.findOne({'Participant': info.subject, 'Session': info.session }, {fields:projection});
     var chartSize = ($("#boxplotSpatialContainer").width() / 5);
-    console.log(participantMetrics);
     renderBoxplot(allSubjects, participantMetrics, metrics[i], "#funcBoxplot"+metrics[i], chartSize);
   };
 }
@@ -142,19 +170,26 @@ funcBoxplotTemporal = function() {
 Tracker.autorun(function() {
   FlowRouter.watchPathChange();
   var currentContext = FlowRouter.current();
-  console.log(currentContext);
-  if ("path" in currentContext && currentContext.path.startsWith('/showFunctional')){ 
+  if ("path" in currentContext && currentContext.path.startsWith('/showFunctional')){
+    var subjectId = FlowRouter.getParam("subjectid"); 
     //navigated to new subject, reset overlays
-    // if (Session.get('lastPath') != currentContext.path){
-    //   Session.set("showSfs", 'true');
-    //   Session.set("showTstd", 'true');
-    //   Session.set("showEn", 'true');
-    //   Session.set("showGp", 'false');
-    // }
+    if (Session.get('lastPath') != subjectId){
+      Session.set("showSfs", 'true');
+      Session.set("showTstd", 'true');
+      Session.set("showEn", 'true');
+      Session.set("showGp", 'false');
+
+      $('#showSfs')[0].checked = true;
+      $('#showTstd')[0].checked = true;
+      $('#showEn')[0].checked = true;
+      $('#showGp')[0].checked = true;
+      
+      funcBoxplotTemporal();
+      funcBoxplotSpatial();
+      showFunctionalImage();
+    }
     
-    funcBoxplotTemporal();
-    funcBoxplotSpatial();
-    showFunctionalImage();
-    //Session.set('lastPath', currentContext.path);
+    var fileMenu = $($("span[id^=File]")[0]).hide();
+    Session.set('lastPath', subjectId);
   }
 });

@@ -19,25 +19,15 @@ new Tabular.Table({
       title: "Subject",
       render: function (val, type, doc) {
         var subid = doc.Participant +"_"+ doc.Session;
-        return '<a href="/showAnatomical/'+subid+'">'+subid+'</a>';
+        return '<a href="/showAnatomical/'+subid+'">'+doc.Participant+'</a>';
       }
     },
-    {data: "Session", title: "Session", visible: false},
+    {data: "Session", title: "Session", /*visible: false*/},
     {data: "CNR", title: "CNR"},
     {data: "EFC", title: "EFC"},
     {data: "FBER", title: "FBER"},
     {data: "FWHM", title: "FWHM"},
     {data: "SNR", title: "SNR"},
- //    {
- //    	data: "Time", 
- //    	title: "Time",
- //    	render: function (val, type, doc) {
- //        if (val instanceof Date) {
- //          return moment(val).calendar();
- //        } else {
- //          return val;
- //        }
- //      }
-	// },
+    {data: "Background Kurtosis", title: "Background Kurtosis"},
   ]
 });

@@ -14,31 +14,20 @@ new Tabular.Table({
   columns: [
     {
       data: "Participant", 
-      title: "Scan",
+      title: "Participant",
       render: function (val, type, doc) {
         var subid = doc.Participant +"_"+ doc.Session + "_" + doc.Series;
-        return '<a href="/showFunctional/'+subid+'">'+subid+'</a>';
+        return '<a href="/showFunctional/'+subid+'">'+doc.Participant+'</a>';
       }
     },
-    {data: "Session", title: "Session", visible:false},
-    {data: "Series", title: "Series", visible:false},
-    //{data: "tr", title: "TR"},
+    {data: "Session", title: "Session", /*visible:false*/},
+    {data: "Series", title: "Series", /*visible:false*/},
     {data: "EFC", title: "EFC"},
     {data: "FBER", title: "FBER"},
     {data: "FWHM", title: "FWHM"},
     {data: "SNR", title: "SNR"},
     {data: "Ghost_y", title: "Ghost"},
- //    {
- //    	data: "Time", 
- //    	title: "Time",
- //    	render: function (val, type, doc) {
- //        if (val instanceof Date) {
- //          return moment(val).calendar();
- //        } else {
- //          return val;
- //        }
- //      }
-	// },
+
   ]
 });
 
@@ -56,28 +45,16 @@ new Tabular.Table({
       title: "Subject",
       render: function (val, type, doc) {
         var subid = doc.Participant +"_"+ doc.Session + "_" + doc.Series;
-        return '<a href="/showFunctional/'+subid+'">'+subid+'</a>';
+        return '<a href="/showFunctional/'+subid+'">'+doc.Participant+'</a>';
       }
     },
-    {data: "Session", title: "Session", visible:false},
-    {data: "Series", title: "Series", visible:false},
-    //{data: "tr", title: "TR"},
+    {data: "Session", title: "Session", /*visible:false*/},
+    {data: "Series", title: "Series", /*visible:false*/},
     {data: "Fraction of Outliers (Mean)", title: "Fraction of Outliers"},
     {data: "GCOR", title: "GCOR"},
     {data: "Quality (Mean)", title: "Quality"},
     {data: "RMSD (Mean)", title: "RMSD"},
     {data: "Signal Fluctuation Sensitivity (Mean)", title: "SFS"},
     {data: "Std DVARS (Mean)", title: "DVARS"},
-  //   {
-  //     data: "Time", 
-  //     title: "Time",
-  //     render: function (val, type, doc) {
-  //       if (val instanceof Date) {
-  //         return moment(val).calendar();
-  //       } else {
-  //         return val;
-  //       }
-  //     }
-  // },
   ]
 });

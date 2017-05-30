@@ -17,7 +17,7 @@ Template.showAnatomicalPage.events({
     var overlayVal = ""+ $(event.currentTarget).is(':checked');
     var  overlayName = ""+ $(event.currentTarget).val();
     Session.set(overlayName, overlayVal);
-    showAnatomicalImage();
+    reloadAnatomicalImage();
   },
 });
 
@@ -41,42 +41,69 @@ Template.showAnatomicalPage.rendered = function() {
   });
 }
 
+reloadAnatomicalImage = function(){
+  if(Session.get("showCsf") === 'true'){
+    papaya.Container.showImage(0,1);
+  }else{
+     papaya.Container.hideImage(0, 1);
+  }
+
+  if(Session.get("showGm") === 'true'){
+    papaya.Container.showImage(0,2);
+  }else{
+     papaya.Container.hideImage(0, 2);
+  }
+  if(Session.get("showWm") === 'true'){
+    papaya.Container.showImage(0,3);
+  }else{
+     papaya.Container.hideImage(0, 3);
+  }
+  if(Session.get("showAb") === 'true'){
+    papaya.Container.showImage(0,4);
+  }else{
+    papaya.Container.hideImage(0,4);
+  }
+}
+
 showAnatomicalImage = function() {
+  //remove old papaya containers, 
+  //assume we always have at most 1 container
+  if(papayaContainers.length > 0){
+    papayaContainers.pop();
+  }
+
   var subjectId = FlowRouter.getParam("subjectid");
   var info = getSubjectInfo();
-  console.log(Meteor.settings);
   var base = Meteor.settings.public.base + info.subject +"/"+info.session + "/";
 
   var params = {};
+
   //add all images in the public directory
   var anatFile = base + subjectId +"_T1w_anatomical-reorient.nii.gz";
   params["images"] = [anatFile];
   console.log('aaaa',anatFile);
-  if(Session.get("showCsf") === 'true'){
-    var csfFile = base + subjectId +"_T1w_anatomical-csf-mask.nii.gz";
-    params["images"].push(csfFile);
-    params[subjectId +"_T1w_anatomical-csf-mask.nii.gz"] = {lut: "Gold"};
-  }
-  if(Session.get("showGm") === 'true'){
-    var gmFile = base + subjectId +"_T1w_anatomical-gm-mask.nii.gz";
-    params["images"].push(gmFile);
-    params[subjectId +"_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
-  }
-  if(Session.get("showWm") === 'true'){
-    var wmFile = base + subjectId +"_T1w_anatomical-wm-mask.nii.gz";
-    params["images"].push(wmFile);
-    params[subjectId +"_T1w_anatomical-wm-mask.nii.gz"] = {lut: "Grayscale"};
-  }
-  if(Session.get("showAb") === 'true'){
-    var abFile = base + subjectId +"_T1w_fav-artifacts-background.nii.gz";
-    params["images"].push(abFile);
-    params[subjectId +"_T1w_fav-artifacts-background.nii.gz"] = {lut: "Grayscale"};
-  }
+
+  var csfFile = base + subjectId +"_T1w_anatomical-csf-mask.nii.gz";
+  params["images"].push(csfFile);
+  params[subjectId +"_T1w_anatomical-csf-mask.nii.gz"] = {lut: "Gold"};
+
+  var gmFile = base + subjectId +"_T1w_anatomical-gm-mask.nii.gz";
+  params["images"].push(gmFile);
+  params[subjectId +"_T1w_anatomical-gm-mask.nii.gz"] = {lut: "Overlay (Positives)"};
+
+  var wmFile = base + subjectId +"_T1w_anatomical-wm-mask.nii.gz";
+  params["images"].push(wmFile);
+  params[subjectId +"_T1w_anatomical-wm-mask.nii.gz"] = {lut: "Grayscale"};
+
+  var abFile = base + subjectId +"_T1w_fav-artifacts-background.nii.gz";
+  params["images"].push(abFile);
+  params[subjectId +"_T1w_fav-artifacts-background.nii.gz"] = {lut: "Grayscale"};
 
   papaya.Container.addViewer("imageDisplay", params, function(err, params){
                                         console.log('papaya callback', err, params)
                                         });
-  papaya.Container.allowPropagation = true;
+
+  //papaya.Container.allowPropagation = true;
 }
 
 getSubjectInfo = function(){
@@ -102,6 +129,7 @@ anatBoxplot = function() {
     var chartSize = ($("#boxplotContainer").width() / 5);
 
     renderBoxplot(allSubjects, participantMetrics, metrics[i], "#anatBoxplot"+metrics[i], chartSize);
+    //remove File menu so user cannot choose other files
   };
 
 }
@@ -109,8 +137,25 @@ Tracker.autorun(function() {
   FlowRouter.watchPathChange();
   var currentContext = FlowRouter.current();
   if ("path" in currentContext && currentContext.path.startsWith('/showAnatomical')){ 
-    //initDictionary();
-    anatBoxplot();
-    showAnatomicalImage();
+    var subjectId = FlowRouter.getParam("subjectid"); 
+    //navigated to new subject, reset overlays
+    if (Session.get('lastPath') != subjectId){
+      Session.set("showCsf", 'true');
+      Session.set("showGm", 'true');
+      Session.set("showWm", 'true');
+      Session.set("showAb", 'true');
+
+      $('#showCsf')[0].checked = true;
+      $('#showWm')[0].checked = true;
+      $('#showGm')[0].checked = true;
+      $('#showAb')[0].checked = true;
+
+      showAnatomicalImage();
+      anatBoxplot();
+    }
+    
+    //reloadAnatomicalImage();
+    var fileMenu = $($("span[id^=File]")[0]).hide();
+    Session.set('lastPath', subjectId);
   }
 });

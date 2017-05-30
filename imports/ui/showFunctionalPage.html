@@ -2,17 +2,16 @@
 <div id="showFunctionalPageDiv" class="container">
 
 <h1></h1>
-<h2>Mean Fucntional Image and Derivatives - {{ subjectId }}  </h2>
+<h2>Mean Functional Image and Derivatives - {{ subjectId }}  </h2>
 <p>This is the functional preprocessed image and the derivatives created by the workflow. 
     They can be used to eyeball the quality of the functional scan and check the derivatives.</p>
     <p>All derivatives are described in the <a href="http://preprocessed-connectomes-project.org/quality-assessment-protocol/#temporal-functional">QAP documentation</a>.</p>
   <div class="row">
     <div class="text-left">
-      <input type="checkbox" name="sfsCb" value="showSfs" checked> Signal Fluctuation
-      <input type="checkbox" name="tstdCb" value="showTstd" checked> Temporal STD Map
-      <input type="checkbox" name="enCb" value="showEn" checked> Estimated Nuisance
-       Sensitivity
-      <input type="checkbox" name="gpCb" value="showGp"> Gray Plot Cluster
+      <input id="showSfs" type="checkbox" name="sfsCb" value="showSfs" checked> Signal Fluctuation Sensitivity
+      <input id="showTstd" type="checkbox" name="tstdCb" value="showTstd" checked> Temporal STD Map
+      <input id="showEn" type="checkbox" name="enCb" value="showEn" checked> Nuisance Voxels
+      <input id="showGp" type="checkbox" name="gpCb" value="showGp" checked> Gray Plot Cluster
     </div>
     <div id="funcImageDisplay" class="text-left"></div>
   </div>
