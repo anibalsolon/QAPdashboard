@@ -75,13 +75,29 @@ participant fall in the distribution of all scores for scans that were included 
     <div class="col inline"><svg id="funcBoxplotFOO" width="90%" height="450px"></svg></div>
   </div>
 
-  <div>
+  <div class="nopaddingleft">
     <h2>Header Info</h2>
-    <p> <strong>TR: </strong> </p>
-    <p> <strong>Aquisition Date: </strong> </p>
-    <p> <strong>Voxel Dimension: </strong> </p>
-    <p> <strong>Bitpix: </strong> </p>
+    <div class="col-md-2"><strong>TR: </strong> </div> <div class="col-md-4"> {{tr}} </div>
+    <div class="col-md-2"><strong>Aquisition Date: </strong></div> <div class="col-md-4">  {{aqc_date}}  </div>
+    <div class="col-md-2"><strong>Voxel Dimension: </strong></div> <div class="col-md-4">  {{pix_dim}}  </div>
+    <div class="col-md-2"><strong>Bitpix: </strong></div> <div class="col-md-4">  {{bitpix}}  </div>
+    <div class="col-md-2"><strong>extension: </strong></div> <div class="col-md-4"> {{extension}}  </div>
+    <div class="col-md-2"><strong>slc slope: </strong></div> <div class="col-md-4">  {{slc_slope}}  </div>
+    <div class="col-md-2"><strong>quatern: </strong></div> <div class="col-md-4">  {{quatern}}  </div>
+    <div class="col-md-2"><strong>slc intern: </strong></div> <div class="col-md-4">  {{slc_inter}}  </div>
+    <div class="col-md-2"><strong>sform code: </strong></div> <div class="col-md-4">  {{slice_code}}  </div>
+    <div class="col-md-2"><strong>slice code: </strong></div> <div class="col-md-4">  {{slice_code}}  </div>
+    <div class="col-md-2"><strong>qform code: </strong></div> <div class="col-md-4">  {{qform_code}}  </div>
+    <div class="col-md-2"><strong>slice start: </strong></div> <div class="col-md-4">  {{slice_start}}  </div>
+    <div class="col-md-2"><strong>q offset: </strong></div> <div class="col-md-4">  {{qoffset}}  </div>
+    <div class="col-md-2"><strong>slice end: </strong></div> <div class="col-md-4">  {{slice_end}}  </div>
+    <div class="col-md-2"><strong>srow x: </strong></div> <div class="col-md-4">  {{srow_x}}  </div>
+    <div class="col-md-2"><strong>slice duration: </strong></div> <div class="col-md-4">  {{slice_duration}}  </div>
+    <div class="col-md-2"><strong>srow y: </strong></div> <div class="col-md-4">  {{srow_y}}  </div>
+    <div class="col-md-2"><strong>toffset: </strong></div> <div class="col-md-4">  {{toffset}}  </div>
+    <div class="col-md-2"><strong>srow z: </strong></div> <div class="col-md-4">  {{srow_z}}  </div>
+    <div class="col-md-2"><strong>Aux File: </strong></div> <div class="col-md-4">  {{aux_file}}  </div>
   </div>
-
 </div>
+ <!-- I'm so lazy --><br/><br/>
 </template>

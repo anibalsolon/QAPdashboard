@@ -10,6 +10,65 @@ Template.showAnatomicalPage.helpers({
     var subjectId = FlowRouter.getParam("subjectid");
     return subjectId;
   },
+  aux_file(){
+    return Session.get('subject')['aux_file'] == undefined?"\u00A0": Session.get('subject')['aux_file'];
+  },
+  bitpix(){
+    return Session.get('subject')['bitpix'] == undefined?"\u00A0": Session.get('subject')['bitpix'];
+  },
+  extension(){
+
+    return Session.get('subject')['extension'] == undefined? "\u00A0": Session.get('subject')['extension'];
+  },
+  pix_dim(){
+    return Session.get('subject')['pix_dimx'] + " x "+Session.get('subject')['pix_dimy'] + " x "+Session.get('subject')['pix_dimz'] ;
+  },
+  qform_code(){
+    return Session.get('subject')['qform_code'] == undefined?"\u00A0": Session.get('subject')['qform_code'];
+  },
+  qoffset(){
+    return Session.get('subject')['qoffset_x']+ ", "+Session.get('subject')['qoffset_y']+", " + Session.get('subject')['qoffset_z'];
+  },
+  quatern(){
+    //TODO: change
+    return Session.get('subject')['quatern_b'] + ", "+ Session.get('subject')['quatern_c']+ ", "+ Session.get('subject')['quatern_d'];
+  },
+  slc_inter(){
+    return Session.get('subject')['scl_inter']== undefined? "\u00A0":Session.get('subject')['scl_inter'];
+  },
+  slc_slope(){
+    return Session.get('subject')['scl_slope']== undefined? "\u00A0":Session.get('subject')['scl_slope'];
+  },
+  slice_code(){
+    return Session.get('subject')['slice_code']== undefined?"\u00A0": Session.get('subject')['slice_code'];
+  },
+  slice_duration(){
+    return Session.get('subject')['slice_duration']== undefined?"\u00A0": Session.get('subject')['slice_duration'];
+  },
+  slice_end(){
+    return Session.get('subject')['slice_end']== undefined? "\u00A0": Session.get('subject')['slice_end'];
+  },
+  slice_start(){
+    return Session.get('subject')['slice_start']== undefined? "\u00A0": Session.get('subject')['slice_start'];
+  },
+  srow_x(){
+    return Session.get('subject')['srow_x']== undefined? "\u00A0": Session.get('subject')['srow_x'];
+  },
+  srow_y(){
+    return Session.get('subject')['srow_y']== undefined? "\u00A0": Session.get('subject')['srow_y'];
+  },
+  srow_z(){
+    return Session.get('subject')['srow_z']== undefined? "\u00A0": Session.get('subject')['srow_z'];
+  },
+  toffset(){
+    return Session.get('subject')['toffset']== undefined? "\u00A0": Session.get('subject')['toffset'];
+  },
+  tr(){
+    return Session.get('subject')['tr']== undefined? "\u00A0": Session.get('subject')['tr'];
+  },
+  aqc_date(){
+    return Session.get('subject')['Time']== undefined? "\u00A0": Session.get('subject')['Time'];
+  },
 });
 
 Template.showAnatomicalPage.events({
@@ -81,7 +140,6 @@ showAnatomicalImage = function() {
   //add all images in the public directory
   var anatFile = base + subjectId +"_T1w_anatomical-reorient.nii.gz";
   params["images"] = [anatFile];
-  console.log('aaaa',anatFile);
 
   var csfFile = base + subjectId +"_T1w_anatomical-csf-mask.nii.gz";
   params["images"].push(csfFile);
@@ -140,11 +198,7 @@ Tracker.autorun(function() {
     var subjectId = FlowRouter.getParam("subjectid"); 
     //navigated to new subject, reset overlays
     if (Session.get('lastPath') != subjectId){
-      Session.set("showCsf", 'true');
-      Session.set("showGm", 'true');
-      Session.set("showWm", 'true');
-      Session.set("showAb", 'true');
-
+      initDictionary();
       $('#showCsf')[0].checked = true;
       $('#showWm')[0].checked = true;
       $('#showGm')[0].checked = true;
@@ -152,6 +206,12 @@ Tracker.autorun(function() {
 
       showAnatomicalImage();
       anatBoxplot();
+
+      //update subject header info
+      var subjectId = FlowRouter.getParam("subjectid");
+      var info = getSubjectInfo();
+      var sub = Anatomical.findOne({'Participant': info.subject, 'Session': info.session });
+      Session.set('subject',sub);
     }
     
     //reloadAnatomicalImage();

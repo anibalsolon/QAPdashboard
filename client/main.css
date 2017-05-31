@@ -47,6 +47,7 @@ h1{
 	margin-bottom: 15px;
 }
 
+/*start boxplots*/
 #boxplotContainer div{
 	max-width: 18%;
 }
@@ -62,10 +63,15 @@ h1{
     border-radius: 50%;
     border: 1px solid #000;
 }
+/*end boxplots*/
 
 .hideArrow{
     visibility: hidden;
 }
 .showArrow{
     visibility: visible;
+}
+
+.nopaddingleft div{
+  padding-left: 0px;
 }
