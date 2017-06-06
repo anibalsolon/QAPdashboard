@@ -1,7 +1,7 @@
 FlowRouter.route('/', {
   name: 'anatomical',
   action: function() {
-    BlazeLayout.render("App_body", {main: "anatomical"});  
+    BlazeLayout.render("App_body", {main: "home"});  
   }
 });
 

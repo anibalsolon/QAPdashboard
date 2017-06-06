@@ -24,10 +24,9 @@ twbs:bootstrap
 momentjs:moment
 kadira:flow-router
 kadira:blaze-layout
-flowkey:user-location
 flowkey:bowser
 jquery
 fortawesome:fontawesome
 dburles:collection-helpers
 session
-udondan:yml
+kwk:fibers

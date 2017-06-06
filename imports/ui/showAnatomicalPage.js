@@ -133,8 +133,8 @@ showAnatomicalImage = function() {
 
   var subjectId = FlowRouter.getParam("subjectid");
   var info = getSubjectInfo();
-  var base = Meteor.settings.public.base + info.subject +"/"+info.session + "/";
-
+  var base = process.env.OUTPUTDIRECTORY + info.subject +"/"+info.session + "/";
+    
   var params = {};
 
   //add all images in the public directory

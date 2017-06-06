@@ -9,7 +9,7 @@
 
 /*start navbar*/
 .lastItem{ padding-right: 20px; padding-bottom: 0px; font-size: 32px;}
-#github{padding-bottom: 0px;}
+#github{padding-bottom: 0px; padding-top: 10px;}
 
 .navbar-brand
 {
@@ -36,7 +36,23 @@
 #footer{
 	padding-top: 15px;
     margin-bottom: -10px;
+      position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 115px;
+
 }
+    html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 115px;
+}
+
+
 
 .inline { 
     display: inline-block; 
@@ -74,4 +90,21 @@ h1{
 
 .nopaddingleft div{
   padding-left: 0px;
+}
+
+#outputPath{
+  width: 400px;
+  /*margin-bottom: 5px;*/
+}
+
+.help{
+    font-size: 12px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+
+}
+
+.assets{
+    font-size: 18px;
+    color: #178acc;
 }

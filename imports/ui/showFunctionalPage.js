@@ -15,7 +15,7 @@ Template.showFunctionalPage.helpers({
   grayplotImg(){
   	var subjectId = FlowRouter.getParam("subjectid");
     var info = getSubjectInfo();
-    var base = Meteor.settings.public.base + info.subject +"/"+info.session + "/";
+    var base = process.env.OUTPUTDIRECTORY + info.subject +"/"+info.session + "/";
     return base + subjectId +"_timeseries-measures.png";
   },
   aux_file(){
@@ -130,6 +130,40 @@ reloadFunctionalImage = function(){
   }
 }
 
+var grayPlotColorTable = function() { };
+
+//imageVal 7: #ffffff r: 255, g:255, b:255 
+//imageVal 9: #7f00ff r: 127, g:0, b:255
+//imageVal 11: #2adcdc r: 42, g: 220, b;220
+//imageVal 13: #d4dc7f r: 212, g: 220, b: 127
+//imageVal 15: #ff0000 r:255, g:0, b:0
+
+grayPlotColorTable.prototype.lookupRed = function (screenVal, imageVal) {
+    if (imageVal == 7) {return 255;}
+    else if (imageVal == 9){return 127;}
+    else if (imageVal == 11){return 42;}
+    else if (imageVal == 13){return 212;}
+    else if (imageVal == 15){return 255;}
+    else{return 255;}
+};
+
+grayPlotColorTable.prototype.lookupGreen = function (screenVal, imageVal) {
+    if (imageVal == 7) {return 255;}
+    else if (imageVal == 9){return 0;}
+    else if (imageVal == 11){return 220;}
+    else if (imageVal == 13){return 220;}
+    else if (imageVal == 15){return 0;}
+    else{return 255;}
+};
+
+grayPlotColorTable.prototype.lookupBlue = function (screenVal, imageVal) {
+    if (imageVal == 7) {return 255;}
+    else if (imageVal == 9){return 255;}
+    else if (imageVal == 11){return 220;}
+    else if (imageVal == 13){return 127;}
+    else if (imageVal == 15){return 0;}
+    else{return 255;}
+};
 showFunctionalImage = function() {
   //remove old papaya containers, 
   //assume we always have at most 1 container
@@ -139,7 +173,7 @@ showFunctionalImage = function() {
 
   var subjectId = FlowRouter.getParam("subjectid");
   var info = getSubjectInfo();
-  var base = Meteor.settings.public.base + info.subject +"/"+info.session + "/";
+  var base = process.env.OUTPUTDIRECTORY + info.subject +"/"+info.session + "/";
 
   var params = {};
   //add all images in the public directory
@@ -160,8 +194,7 @@ showFunctionalImage = function() {
 
   var f = base + subjectId +"_grayplot-cluster.nii.gz";
   params["images"].push(f);
-  //TODO: create color table for grayplot cluster
-  params[subjectId +"_grayplot-cluster.nii.gz"] = {"lut": "Green Overlay", "min": 0, "max":900, "hide":true};
+  params[subjectId +"_grayplot-cluster.nii.gz"] = {"lut": new grayPlotColorTable(), "min": 0, "max":15, "hide":true};
 
   papaya.Container.addViewer("funcImageDisplay", params, function(err, params){
                                         console.log('papaya callback', err, params);
@@ -233,7 +266,7 @@ Tracker.autorun(function() {
       Session.set("showSfs", 'true');
       Session.set("showTstd", 'true');
       Session.set("showEn", 'true');
-      Session.set("showGp", 'false');
+      Session.set("showGp", 'true');
 
       $('#showSfs')[0].checked = true;
       $('#showTstd')[0].checked = true;

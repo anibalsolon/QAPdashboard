@@ -3,12 +3,12 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 import { Anatomical } from '../api/anatomical.js';
 import { FunctionalSpatial } from '../api/functional.js';
 import { Session } from 'meteor/session';
+import './home.js';
 import './anatomical.js';
 import './functional.js';
 import './showAnatomicalPage.js';
 import './showFunctionalPage.js';
 import './body.html';
-import './utils.js';
 
 Template.App_body.helpers({
   showArrowNext(){

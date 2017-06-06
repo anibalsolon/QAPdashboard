@@ -58,6 +58,5 @@ histogram = function(metric) {
   var min_val = Math.min.apply(Math, d);
   var max_val = Math.max.apply(Math, d);
   var chartSize = $("#anatomicalHistogramContainer").width();
-  console.log(chartSize);
   renderHistogram(d, min_val, max_val, "#anatomicalHistogram", chartSize);
 }
